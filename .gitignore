@@ -1,0 +1,11 @@
+# Blacklist everything
+*
+
+# Whitelist folder content
+!*/
+
+# Track specific filetypes
+!*ignore
+!*md
+!*R
+!*py
