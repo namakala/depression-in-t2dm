@@ -25,3 +25,14 @@ actors <- c("Nora", "Aly")
 # Extract decision
 tbl %<>%
   inset(actors, value = lapply(actors, \(actor) getDecision(tbl$notes, actor)))
+
+
+## STAT
+
+# Cross tabulate the decision
+with(tbl, table(Nora, Aly))
+
+# Evaluate the Kappa agreement
+tbl %>%
+  subset(select = -notes) %>%
+  irr::kappa2()
