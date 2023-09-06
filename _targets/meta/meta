@@ -1,0 +1,17 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|8ea3807e1eee9135|||||||||||||||
+calcSE|function|b8c6199d9026a070|||||||||||||||
+file_extract|stem|98b8c7f5631bfe79|19e2526195eec846|e9947fe174b836f1|-37595979|data/raw/extracted.csv|t19605.7942433598s|f355f1a58f0a025a|177576|file|local|vector|||0.001||
+findCol|function|5b2a8b848e8f1661|||||||||||||||
+finder|function|26d21031be1e93c5|||||||||||||||
+iterate|function|5d2f95416df23162|||||||||||||||
+itergroup|object|cb5b44743def6a93|||||||||||||||
+pooled_author|stem|a435ac3e7c60e5b0|3425823b97771af0|dbd04d7f500a7c4e|-102118361||t19606.420053059s|106cd9dab9b0f192|159581|rds|local|vector|||1.339|149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values|
+pooled_es|stem|0889c4b290008ebd|3a98a3a5284d9d5c|d871f493d1b15096|-915657858||t19606.4201188351s|f528c3976c7dac33|677210|rds|local|vector|||5.519|149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. 149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. 149 observations dropped due to missing values. 149 observations dropped due to missing values|
+poolES|function|22d55b7697c3e74b|||||||||||||||
+raw|object|11573ee32a0a140e|||||||||||||||
+readData|function|d63f5224481bece6|||||||||||||||
+tbl|stem|90ee5a1623964dd2|2741c2d70e72a160|6339ee8bb4d73d02|1728411417||t19605.8192369117s|0a2f547da42210a4|22493|rds|local|vector|||0.385||
+tbl_clean|stem|90ee5a1623964dd2|303ad377df7529c8|73fb116b2dc73c66|-798661904||t19606.4200532904s|0a2f547da42210a4|22493|rds|local|vector|||0||
+test|object|6f4a7f1cd2cbcd4f|||||||||||||||
+vizMeta|function|5a2076d2aaa60575|||||||||||||||
