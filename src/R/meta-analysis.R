@@ -109,16 +109,3 @@ vizMeta <- function(meta_res, ...) {
 
   return(figs)
 }
-
-test <- tar_read(pooled_author)[[4]] %>%
-  vizMeta()
-
-tar_read(pooled_es)[["year"]] %>%
-  lapply("[", c("TE", "seTE")) %>%
-  lapply(data.frame) %>%
-  {do.call(rbind, .)} %>%
-  inset2("year", value = gsub(x = rownames(.), "\\..*", "") %>% as.numeric()) %>%
-  tibble::tibble() %>%
-  ggplot2::ggplot(ggplot2::aes(x = year, y = TE)) +
-    ggplot2::geom_point(ggplot2::aes(size = seTE)) +
-    ggplot2::geom_smooth(method = "lm", formula = y ~ x)
