@@ -61,9 +61,14 @@ poolES <- function(tbl, ...) {
     TE = as.numeric(prev_diabet),
     seTE = calcSE(params),
     data = tbl,
-    studlab = paste0(incl_author, " (", incl_year, ")"),
+    studlab = incl_author_year,
+    prediction = TRUE,
+    predict.seed = 1810,
     ...
-  )
+  ) %>%
+    dmetar::find.outliers() %>%
+    extract2("m.random") %>%
+    meta::metabias(method = "linreg", k.min = 5)
 
   return(res)
 }
@@ -83,8 +88,7 @@ iterate <- function(tbl, groupvar, ...) {
       sub_tbl <- tbl %>% subset(.[[groupvar]] == group)
       if (nrow(sub_tbl) > 1) {
         ES <- poolES(sub_tbl, ...)
-        bias <- meta::metabias(ES, method = "linreg", k.min = 5)
-        return(bias)
+        return(ES)
       }
     })
   } else {
