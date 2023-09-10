@@ -83,8 +83,8 @@ iterate <- function(tbl, groupvar, ...) {
       sub_tbl <- tbl %>% subset(.[[groupvar]] == group)
       if (nrow(sub_tbl) > 1) {
         ES <- poolES(sub_tbl, ...)
-        ES$bias <- meta::metabias(ES, method = "linreg")
-        return(ES)
+        bias <- meta::metabias(ES, method = "linreg")
+        return(bias)
       }
     })
   } else {
@@ -92,20 +92,4 @@ iterate <- function(tbl, groupvar, ...) {
     res <- lapply(groupvars, \(groupvar) iterate(tbl, groupvar, ...))
   }
   return(res)
-}
-
-vizMeta <- function(meta_res, ...) {
-  #' Visualize Meta-Analysis
-  #'
-  #' Visualize the forest and funnel plot
-  #'
-  #' @param meta_res A meta-analysis object
-  #' @return List of figures
-  figs   <- list(
-    "funnel"  = meta::funnel(meta_res),
-    "forest"  = meta::forest(meta_res, ref = 0, sortvar = TE),
-    "drapery" = meta::drapery(meta_res, type = "pval")
-  )
-
-  return(figs)
 }
