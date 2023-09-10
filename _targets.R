@@ -34,8 +34,8 @@ list(
   tar_target(bias_author, mkReport(pooled_author, report_type = "bias")),
   tar_target(meta_eda, lapply(pooled_groups, mkReport, report_type = "meta")),
   tar_target(bias_eda, lapply(pooled_groups, mkReport, report_type = "bias")),
-  tar_target(meta_all, reportMeta(pooled_all, report_type = "meta")),
-  tar_target(bias_all, reportMeta(pooled_all, report_type = "bias")),
+  tar_target(meta_all, reportMeta(pooled_all, type = "meta")),
+  tar_target(bias_all, reportMeta(pooled_all, type = "bias")),
   tar_quarto(readme, "README.qmd"),
   tar_quarto(report, "draft/report.qmd")
 )

@@ -52,18 +52,61 @@ report_meta <- function(meta) {
   return(res)
 }
 
+getES <- function(meta, type = "Random") {
+  sub_meta <- meta %>% subset(.$Author == type)
+  return(sub_meta)
+}
+
+reportES <- function(ES) {
+  msg <- sprintf("%s%% [%s%%; p %s]", round(ES$`%`, 2), ES$`95% CI`, ES$p)
+  return(msg)
+}
+
+n_eda <- sapply(tar_read(bias_eda), \(x) sum(x$N))
+
+es_all <- getES(tar_read(meta_all)) %>% reportES()
+
+es_eda <- lapply(tar_read(meta_eda), getES) %>%
+  lapply("[[", "%") %>%
+  sapply(mean)
+
+es_author <- getES(tar_read(meta_author)) %>%
+  extract2("%") %>%
+  mean(na.rm = TRUE)
+
 ```
 
 # Executive Summary
 
-- Effect size was pooled using the raw proportion without transformation
-- Outliers were identified for reported studies which 95% CI is beyond the pooled confidence interval
-- Outliers were removed in favor of improving the homogeneity, as reflected by I^2^ and prediction interval
-- Random effect model is used for all meta-analysis procedure
+- Two datasets are used:
+  - Raw data: Includes all extracted studies, still contains duplicates (N = `r nrow(tar_read(tbl))`)
+  - Clean data: Removed duplicates of extracted studies (N = `r nrow(tar_read(tbl_clean))`)
+- Effect size was pooled for the prevalence of diabetes
+- Analysis approach:
+  - Raw data: Reproduce the result reported in included reviews, also to measure bias and heterogeneity
+  - Clean data: Conduct meta-analysis on a subset of clean data, grouped by year, countries, diagnostic criteria, and psychometric instruments
+  - General steps:
+    - Extracted studies which 95% CI expands beyond the pooled confidence interval is regarded as outliers
+    - Outliers were removed in favor of improving the homogeneity, as reflected by I^2^ and prediction interval:
+      - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies without outliers
+      - EDA grouped by year contains `r n_eda["year"]` studies without outliers
+      - EDA grouped by country contains `r n_eda["clean_country"]` studies without outliers
+      - EDA grouped by diagnostic criteria contains `r n_eda["clean_criteria"]` studies without outliers
+      - EDA grouped by psychometric instrument contains `r n_eda["clean_instrument"]` studies without outliers
+      - Meta-analysis on whole clean data contains `r sum(tar_read(bias_all)$N)` studies without outliers
+    - Random effect model is fitted for all meta-analysis procedure
+- **Insight:**
+  - Using whole clean data, I found that the prevalence of depression is `r es_all`
+  - Meanwhile, EDA procedure resulted in the following mean of prevalence:
+    - Grouped by year: `r es_eda["year"]`%
+    - Grouped by country: `r es_eda["clean_country"]`%
+    - Grouped by diagnostic criteria: `r es_eda["clean_criteria"]`%
+    - Grouped by psychometric instrument: `r es_eda["clean_instrument"]`%
+  - It appears that sub-group analysis is necessary for year, diagnostic criteria, and psychometric instrument
 
 {{< pagebreak >}}
 
-# Re-analyzing Previous Publications
+# Re-analysis of Included Reviews
 
 ```{r tbl-bias-author}
 #| tbl-cap: Bias and heterogeneity in included reviews
@@ -73,7 +116,7 @@ tar_read(bias_author) %>% report_bias()
 ```
 
 ```{r tbl-meta-author}
-#| tbl-cap: Re-analysis of all included reviews
+#| tbl-cap: Re-analysis of included reviews
 
 tar_read(meta_author) %>% report_meta()
 
@@ -83,9 +126,44 @@ tar_read(meta_author) %>% report_meta()
 
 # Exploratory Data Analysis
 
+## Whole Dataset
+
+```{r tbl-bias-all}
+#| tbl-cap: Bias and heterogeneity in all primary studies
+
+tar_read(bias_all) %>%
+  subset(select = -c(tau, Rb)) %>%
+  kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
+    "N", "$\\beta$", "SE", "$p$", "$I^2$", "$H^2$", "$\\tau^2$"
+  )) %>%
+  add_header_above(c(" " = 1, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+```{r tbl-meta-all}
+#| tbl-cap: Pooling effect size in all primary studies
+
+sub_meta <- tar_read(meta_all) %>%
+  subset(!.$Exclude, select = -c(Exclude))
+
+to_bold  <- sub_meta %>% {which(.$Author %in% c("Random", "Fixed"))}
+to_color <- sub_meta %>% {which(.$Author == "Prediction")}
+
+sub_meta %>%
+  kable(booktabs = TRUE, longtable = TRUE) %>%
+  add_header_above(c(" " = 2, "Prevalence" = 4, "Weight (%)" = 2)) %>%
+  row_spec(to_bold, bold = TRUE) %>%
+  row_spec(to_color, bold = TRUE, background = "#D8DEE9") %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+
 ## Grouped by year
 
 ```{r tbl-bias-year}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by year
 
 tar_load(bias_eda)
 bias_eda$year %>% report_bias()
@@ -93,6 +171,7 @@ bias_eda$year %>% report_bias()
 ```
 
 ```{r tbl-meta-year}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by year
 
 tar_load(meta_eda)
 meta_eda$year %>% report_meta()
@@ -102,6 +181,7 @@ meta_eda$year %>% report_meta()
 ## Grouped by country
 
 ```{r tbl-bias-country}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by countries
 
 tar_load(bias_eda)
 bias_eda$clean_country %>% report_bias()
@@ -109,6 +189,7 @@ bias_eda$clean_country %>% report_bias()
 ```
 
 ```{r tbl-meta-country}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by countries
 
 tar_load(meta_eda)
 meta_eda$clean_country %>% report_meta()
@@ -118,6 +199,7 @@ meta_eda$clean_country %>% report_meta()
 ## Grouped by criteria
 
 ```{r tbl-bias-criteria}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by diagnostic criteria
 
 tar_load(bias_eda)
 bias_eda$clean_criteria %>% report_bias()
@@ -125,6 +207,7 @@ bias_eda$clean_criteria %>% report_bias()
 ```
 
 ```{r tbl-meta-criteria}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by diagnostic criteria
 
 tar_load(meta_eda)
 meta_eda$clean_criteria %>% report_meta()
@@ -138,6 +221,7 @@ meta_eda$clean_criteria %>% report_meta()
 ## Grouped by instrument
 
 ```{r tbl-bias-instrument}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by psychometric instruments
 
 tar_load(bias_eda)
 bias_eda$clean_instrument %>% report_bias()
@@ -145,6 +229,7 @@ bias_eda$clean_instrument %>% report_bias()
 ```
 
 ```{r tbl-meta-instrument}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by psychometric instruments
 
 tar_load(meta_eda)
 meta_eda$clean_instrument %>% report_meta()
