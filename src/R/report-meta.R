@@ -120,11 +120,13 @@ reportMeta <- function(meta_res, type = "meta", ...) {
       "Exclude" = exclude
     ))
 
+    sub_tbl <- tbl %>% subset(!.$Exclude)
+
     res <- with(meta,
       tbl %>%
-        rbind(list("Fixed", nrow(data), TE.fixed * 100, ci_fixed, zval.fixed, p_fixed, NA, NA, FALSE)) %>%
-        rbind(list("Random", nrow(data), TE.random * 100, ci_random, zval.random, p_random, NA, NA, FALSE)) %>%
-        rbind(list("Prediction", NA, NA, ci_predict, NA, NA, NA, NA, FALSE))
+        rbind(list("Fixed", sum(sub_tbl$N), TE.fixed * 100, ci_fixed, zval.fixed, p_fixed, NA, NA, FALSE)) %>%
+        rbind(list("Random", sum(sub_tbl$N), TE.random * 100, ci_random, zval.random, p_random, NA, NA, FALSE)) %>%
+        rbind(list("Prediction", sum(sub_tbl$N), NA, ci_predict, NA, NA, NA, NA, FALSE))
     )
 
   } else if(type == "bias") {
