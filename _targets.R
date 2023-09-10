@@ -26,8 +26,10 @@ itergroup <- c(
 list(
   tar_target(file_extract, raw["extracted"], format = "file"),
   tar_target(tbl, readData(file_extract)),
-  tar_target(pooled_author, iterate(tbl, "author", sm = "PRAW")),
+  tar_target(pooled_author, iterate(tbl, "author_year", sm = "PRAW")),
   tar_target(tbl_clean, tbl),
   tar_target(pooled_es, iterate(tbl_clean, itergroup, sm = "PRAW")),
+  tar_target(meta_author, mkReport(pooled_author, report_type = "meta")),
+  tar_target(bias_author, mkReport(pooled_author, report_type = "bias")),
   tar_quarto(readme, "README.qmd")
 )

@@ -1,18 +1,26 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|7b982d0dd0fa8707|||||||||||||||
+.Random.seed|object|35de205cd98de7cd|||||||||||||||
+bias_author|stem|decbaebabd312dab|71b35098f0a9b34e|063f286af6287517|2144877273||t19610.5808959814s|2f31fee03983f2c3|1680|rds|local|vector|||0.124||
 calcSE|function|b8c6199d9026a070|||||||||||||||
 file_extract|stem|98b8c7f5631bfe79|19e2526195eec846|e9947fe174b836f1|-37595979|data/raw/extracted.csv|t19605.7942433598s|f355f1a58f0a025a|177576|file|local|vector|||0.001||
 findCol|function|5b2a8b848e8f1661|||||||||||||||
 finder|function|26d21031be1e93c5|||||||||||||||
-iterate|function|5d2f95416df23162|||||||||||||||
+getCI|function|3703ba5d132d5991|||||||||||||||
+getPval|function|e5d656dd87d9dd2b|||||||||||||||
+iterate|function|aea225851cd96d81|||||||||||||||
+iterateReport|function|12384be12ec255a8|||||||||||||||
 itergroup|object|cb5b44743def6a93|||||||||||||||
-pooled_author|stem|a435ac3e7c60e5b0|3425823b97771af0|dbd04d7f500a7c4e|-102118361||t19606.420053059s|106cd9dab9b0f192|159581|rds|local|vector|||1.339|149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values|
-pooled_es|stem|0889c4b290008ebd|3a98a3a5284d9d5c|d871f493d1b15096|-915657858||t19606.4201188351s|f528c3976c7dac33|677210|rds|local|vector|||5.519|149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. 149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. 149 observations dropped due to missing values. 149 observations dropped due to missing values|
+meta_author|stem|d26b5f584fccbbb2|278193674bcc4c6c|063f286af6287517|-562273166||t19610.5808973008s|5638a894927cb2ba|25749|rds|local|vector|||0.096||
+mkReport|function|c8997cd1a51d2e70|||||||||||||||
+pooled_author|stem|4317e6a4d243a8db|2903448c1449ed67|4052f0a73b0cd8d5|-102118361||t19610.5653742388s|6391a0d294480d6d|112248|rds|local|vector|||2.855|149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values|
+pooled_es|stem|0ff3521889705ce1|3a98a3a5284d9d5c|4ee97587f03159ef|-915657858||t19610.5654611957s|75f9fb2150e2e41c|449019|rds|local|vector|||7.415|149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. 149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. 1 observations dropped due to missing values. 149 observations dropped due to missing values. 149 observations dropped due to missing values|
 poolES|function|22d55b7697c3e74b|||||||||||||||
 raw|object|11573ee32a0a140e|||||||||||||||
-readData|function|d63f5224481bece6|||||||||||||||
+readData|function|5eb2dc9bb2558cd0|||||||||||||||
 readme|stem|dd3f782aacfc09c3|c2c4b6e3bcf05d55|d84d7cdd1c3c4b08|-165896733|README.md*README.qmd|t19607.5884051124s|898ef23d83cedb57|6223|file|local|vector|||8.4||
-tbl|stem|90ee5a1623964dd2|2741c2d70e72a160|6339ee8bb4d73d02|1728411417||t19605.8192369117s|0a2f547da42210a4|22493|rds|local|vector|||0.385||
-tbl_clean|stem|90ee5a1623964dd2|303ad377df7529c8|73fb116b2dc73c66|-798661904||t19606.4200532904s|0a2f547da42210a4|22493|rds|local|vector|||0||
+reportCI|function|5e21f5d6958925fe|||||||||||||||
+reportMeta|function|f4632c226b231d18|||||||||||||||
+tbl|stem|5e815ba668308f60|2741c2d70e72a160|03c08ef5359413e9|1728411417||t19610.5653407893s|620ece7ed77cf899|22865|rds|local|vector|||0.292||
+tbl_clean|stem|5e815ba668308f60|303ad377df7529c8|85a8561c1ec2ad34|-798661904||t19610.5653743777s|620ece7ed77cf899|22865|rds|local|vector|||0||
 test|object|6f4a7f1cd2cbcd4f|||||||||||||||
-vizMeta|function|5a2076d2aaa60575|||||||||||||||
+vizMeta|function|315d4b7be5ffbec5|||||||||||||||
