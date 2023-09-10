@@ -8,7 +8,10 @@ readData <- function(path, ...) {
   #' @param path Relative path of the file
   #' @inheritDotParams readr::read_csv()
   #' @return A tibble data frame
-  tbl <- readr::read_csv(file = path, ...)
+  tbl <- readr::read_csv(file = path, ...) %>%
+    inset2("author_year", value = sprintf(
+      "%s (%s)", gsub(x = .$author, "^(\\w+).*", "\\1"), .$year
+    ))
 
   return(tbl)
 }
