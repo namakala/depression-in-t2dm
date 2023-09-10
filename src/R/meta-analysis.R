@@ -98,7 +98,3 @@ iterate <- function(tbl, groupvar, ...) {
   return(res)
 }
 
-test <- function() {
-  meta::update.meta(pooled_all$x, subgroup = year, prediction = TRUE) %>%
-    dmetar::find.outliers()
-}

@@ -41,7 +41,7 @@ This step will install `targets`, which I use to track my analysis pipeline. The
 targets::tar_make()
 ```
 
-This step will read `_targets.R` file, where I systematically draft all of the analysis steps. Once it's done running, you will find the rendered document (either in `html` or `pdf`) inside the `render` directory.
+This step will read `_targets.R` file, where I systematically draft all of the analysis steps. Once it's done running, you will find the rendered document (either in `html` or `pdf`) inside the `draft` directory.
 
 # What's this all about?
 

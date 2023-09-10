@@ -25,6 +25,7 @@ pkgs <- c("magrittr", "targets", "kableExtra")
 pkgs_load <- sapply(pkgs, library, character.only = TRUE)
 
 options(digits = 2)
+options(knitr.kable.NA = "")
 
 report_bias <- function(bias) {
   res <- bias %>%
@@ -87,7 +88,7 @@ es_author <- getES(tar_read(meta_author)) %>%
   - Clean data: Conduct meta-analysis on a subset of clean data, grouped by year, countries, diagnostic criteria, and psychometric instruments
   - General steps:
     - Extracted studies which 95% CI expands beyond the pooled confidence interval is regarded as outliers
-    - Outliers were removed in favor of improving the homogeneity, as reflected by I^2^ and prediction interval:
+    - Outliers were removed when pooling the effect size in favor of improving the homogeneity:
       - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies without outliers
       - EDA grouped by year contains `r n_eda["year"]` studies without outliers
       - EDA grouped by country contains `r n_eda["clean_country"]` studies without outliers
@@ -102,7 +103,12 @@ es_author <- getES(tar_read(meta_author)) %>%
     - Grouped by country: `r es_eda["clean_country"]`%
     - Grouped by diagnostic criteria: `r es_eda["clean_criteria"]`%
     - Grouped by psychometric instrument: `r es_eda["clean_instrument"]`%
-  - It appears that sub-group analysis is necessary for year, diagnostic criteria, and psychometric instrument
+  - Considering the number of outliers and differences between EDA result and whole dataset meta-analysis, it appears that sub-group analysis is necessary
+- What to include in the report?
+  - @tbl-bias-author
+  - @tbl-bias-all
+  - @sec-subgroup-year
+  - @sec-subgroup-criteria
 
 {{< pagebreak >}}
 
@@ -239,4 +245,22 @@ meta_eda$clean_instrument %>% report_meta()
 \newpage
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
+
+# Sub-group Meta Analysis
+
+## Grouped by year {#sec-subgroup-year}
+
+```{r lst-subgroup-year}
+
+meta::update.meta(tar_read(pooled_all)$x, subgroup = year)
+
+```
+
+## Grouped by criteria {#sec-subgroup-criteria}
+
+```{r lst-subgroup-criteria}
+
+meta::update.meta(tar_read(pooled_all)$x, subgroup = clean_criteria)
+
+```
 
