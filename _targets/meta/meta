@@ -1,12 +1,12 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|26dd688341d8e231|||||||||||||||
-bias_all|stem|c1d2795a83865834|c14a730bef103184|c645407a7e075af0|-1911514426||t19610.8525249669s|1b53092e3910d288|266|rds|local|vector|||0.003||
-bias_author|stem|dc8c275f29d9b5c8|71b35098f0a9b34e|2274256cd2609ed1|2144877273||t19610.8525230456s|80c0be946e02aafd|1796|rds|local|vector|||0.129||
-bias_eda|stem|9aea8278dfd0e45f|e33d8d8235ab096c|1b4a8eff2e5a3232|-308918961||t19610.8525276637s|38094b2fe5f5b83c|3373|rds|local|vector|||0.165||
+.Random.seed|object|b3faf90291367a60|||||||||||||||
+bias_all|stem|f5f5be3b96d51177|c14a730bef103184|859e331fcb66878e|-1911514426||t19610.8704359265s|76d5158c9904ac60|264|rds|local|vector|||0.003||
+bias_author|stem|bae6c9ac3e9bee3e|71b35098f0a9b34e|d7f6c7495ab1cc17|2144877273||t19610.8702746401s|34875627395d5cd6|1656|rds|local|vector|||0.123||
+bias_eda|stem|7b8e3185042a256b|e33d8d8235ab096c|7eb5fb71fe0cab00|-308918961||t19610.8704380677s|138dd220e8351264|3412|rds|local|vector|||0.164||
 calcSE|function|b8c6199d9026a070|||||||||||||||
 cleanData|function|18b89ea1a91f6d46|||||||||||||||
 deduplicate|function|6a41d49c524b1236|||||||||||||||
-file_extract|stem|98b8c7f5631bfe79|19e2526195eec846|e9947fe174b836f1|-37595979|data/raw/extracted.csv|t19605.7942433598s|f355f1a58f0a025a|177576|file|local|vector|||0.001||
+file_extract|stem|718534d9da678a95|19e2526195eec846|e9947fe174b836f1|-37595979|data/raw/extracted.csv|t19610.869295637s|2dd5d98a19c1c234|139369|file|local|vector|||0||
 findCol|function|5b2a8b848e8f1661|||||||||||||||
 finder|function|26d21031be1e93c5|||||||||||||||
 getCI|function|3703ba5d132d5991|||||||||||||||
@@ -14,21 +14,21 @@ getPval|function|e5d656dd87d9dd2b|||||||||||||||
 iterate|function|365db5e9edce3dc3|||||||||||||||
 iterateReport|function|65522a0891a3418c|||||||||||||||
 itergroup|object|712a05d30a150db6|||||||||||||||
-meta_all|stem|2fc385c7d98bc7cf|d70b762553ffccff|c645407a7e075af0|720523509||t19610.8525251637s|51da2e0d94957752|21680|rds|local|vector|||0.008||
-meta_author|stem|fe3baa8e6e024ccc|278193674bcc4c6c|2274256cd2609ed1|-562273166||t19610.852524747s|7d37fc1d91123c9c|26309|rds|local|vector|||0.126||
-meta_eda|stem|c6fa37067179b0d2|9cc5a0c73beac323|1b4a8eff2e5a3232|885042569||t19610.8525335665s|75f0bc0a05925a71|94570|rds|local|vector|||0.487||
+meta_all|stem|03bb16e241d70c79|d70b762553ffccff|859e331fcb66878e|720523509||t19610.8704361117s|3372d4c11fff6868|19983|rds|local|vector|||0.008||
+meta_author|stem|301f4653c9cdc231|278193674bcc4c6c|d7f6c7495ab1cc17|-562273166||t19610.8702765151s|22b93a63ee865535|24487|rds|local|vector|||0.151||
+meta_eda|stem|a3f482cbb17078e5|9cc5a0c73beac323|7eb5fb71fe0cab00|885042569||t19610.8704440978s|2ba1712b343d3110|87736|rds|local|vector|||0.5||
 mkReport|function|3e4e4014ae4934f8|||||||||||||||
-pooled_all|stem|b8d7a7399c55a9f5|60e58434911d3a6e|a3a71f4eb2a23a43|-423812476||t19610.8151594308s|27cae81fedbb5f29|98770|rds|local|vector|||4.665|NAs introduced by coercion. NAs introduced by coercion. Ratio of largest to smallest sampling variance extremely large. May not be able to obtain stable results.. Studies with NAs not considered in outlier analysis.. 149 observations dropped due to missing values|
-pooled_author|stem|384f7352af10ff9b|2903448c1449ed67|9d1705e8c87376a0|-102118361||t19610.8145586144s|0f0d35391db5bcb8|111450|rds|local|vector|||5.381|Studies with NAs not considered in outlier analysis.. 149 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
-pooled_groups|stem|b91e4db4b3d7d664|3a98a3a5284d9d5c|dd7522d71bcc020d|121320716||t19610.8152925571s|52d4553217f8a9f1|453819|rds|local|vector|||11.386|Studies with NAs not considered in outlier analysis.. 148 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. Studies with NAs not considered in outlier analysis.. 148 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Ratio of largest to smallest sampling variance extremely large. May not be able to obtain stable results.. Studies with NAs not considered in outlier analysis.. 149 observations dropped due to missing values. Studies with NAs not considered in outlier analysis.. 148 observations dropped due to missing values. Fisher scoring algorithm may have gotten stuck at a local maximum.Setting tau2  0. Check the profile likelihood plot with profile.|
+pooled_all|stem|9f354ad5f83aee5f|60e58434911d3a6e|9395dc2f5d4b6fce|-423812476||t19610.8702990269s|947b80fac5bdca87|90667|rds|local|vector|||1.92|NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
+pooled_author|stem|0633c5a4d9ec2889|2903448c1449ed67|c57082665fdc9d27|-102118361||t19610.8702729155s|39d6113669859b7c|99495|rds|local|vector|||5.585|NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
+pooled_groups|stem|09eec1627cf67aa5|3a98a3a5284d9d5c|90cfdf459f655fa2|121320716||t19610.8704358223s|5a53ccc35fcf9f38|413871|rds|local|vector|||11.724|NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. Fisher scoring algorithm may have gotten stuck at a local maximum.Setting tau2  0. Check the profile likelihood plot with profile.|
 poolES|function|0070f2542c8d23f4|||||||||||||||
 raw|object|11573ee32a0a140e|||||||||||||||
 readData|function|c8d3cc417d0d13fb|||||||||||||||
-readme|stem|dd3f782aacfc09c3|c2c4b6e3bcf05d55|d84d7cdd1c3c4b08|-165896733|README.md*README.qmd|t19607.5884051124s|898ef23d83cedb57|6223|file|local|vector|||8.4||
-report|stem|20407f5059ff3cb3|b060c58e0a64a62f|2ef3c121d1a8a208|-237041703|draft/report.pdf*draft/report.qmd|t19610.8664938605s|64d3a25e14e792dd|226260|file|local|vector|||25.072||
+readme|stem|5ed2393005de911f|c2c4b6e3bcf05d55|d84d7cdd1c3c4b08|-165896733|README.md*README.qmd|t19610.8702027991s|5846050ad2e5a311|9246|file|local|vector|||11.82||
+report|stem|04f315aff80eac50|b060c58e0a64a62f|9f1e81e2b8ab3248|-237041703|draft/report.pdf*draft/report.qmd|t19610.870729286s|a097556b6958e7b6|197350|file|local|vector|||24.683||
 reportCI|function|5e21f5d6958925fe|||||||||||||||
 reportMeta|function|f7d5749c032491e3|||||||||||||||
-tbl|stem|d46c430087d59006|2741c2d70e72a160|9e4afb63f4c0dcd8|1728411417||t19610.7083835986s|ddcb27580bc0dc2d|31685|rds|local|vector|||0.299||
-tbl_clean|stem|fad625700b647cca|d770d631dc7e2c2e|5ea9318b1159547c|-798661904||t19610.7084195481s|e1e952e1b9cf10c3|37799|rds|local|vector|||0.021|NAs introduced by coercion|
+tbl|stem|437e3619450f259e|2741c2d70e72a160|cce2e18371c2df42|1728411417||t19610.8702079496s|89f455e122967f83|28596|rds|local|vector|||0.36||
+tbl_clean|stem|5e83e9c85be19d3a|d770d631dc7e2c2e|06222fdc2892a982|-798661904||t19610.8702731586s|8085d119a58bcc8d|33399|rds|local|vector|||0.004|NAs introduced by coercion|
 test|function|c1332ec4494ccac9|||||||||||||||
 vizMeta|function|315d4b7be5ffbec5|||||||||||||||
