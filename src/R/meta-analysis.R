@@ -83,7 +83,7 @@ iterate <- function(tbl, groupvar, ...) {
       sub_tbl <- tbl %>% subset(.[[groupvar]] == group)
       if (nrow(sub_tbl) > 1) {
         ES <- poolES(sub_tbl, ...)
-        bias <- meta::metabias(ES, method = "linreg")
+        bias <- meta::metabias(ES, method = "linreg", k.min = 5)
         return(bias)
       }
     })
