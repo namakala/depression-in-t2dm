@@ -93,9 +93,10 @@ reportMeta <- function(meta_res, type = "meta", ...) {
   meta <- bias$x
 
   if (type == "meta") {
-    ci        <- getCI(meta, lo = "lower", hi = "upper")
-    ci_fixed  <- getCI(meta, lo = "lower.fixed", hi = "upper.fixed")
-    ci_random <- getCI(meta, lo = "lower.random", hi = "upper.random")
+    ci         <- getCI(meta, lo = "lower", hi = "upper")
+    ci_fixed   <- getCI(meta, lo = "lower.fixed", hi = "upper.fixed")
+    ci_random  <- getCI(meta, lo = "lower.random", hi = "upper.random")
+    ci_predict <- getCI(meta, lo = "lower.predict", hi = "upper.predict")
 
     p         <- getPval(meta, p = "pval")
     p_fixed   <- getPval(meta, p = "pval.fixed")
@@ -108,23 +109,27 @@ reportMeta <- function(meta_res, type = "meta", ...) {
       round(2)
 
     tbl <- with(meta, tibble::tibble(
-      "Author" = studlab,
-      "%"      = TE * 100,
-      "95% CI" = ci,
-      "Z"      = zval,
-      "p"      = p,
-      "Random" = weights$random,
-      "Fixed"  = weights$fixed
+      "Author"  = studlab,
+      "N"       = data$n_total,
+      "%"       = TE * 100,
+      "95% CI"  = ci,
+      "Z"       = zval,
+      "p"       = p,
+      "Random"  = weights$random,
+      "Fixed"   = weights$fixed,
+      "Exclude" = exclude
     ))
 
     res <- with(meta,
       tbl %>%
-        rbind(list("Fixed", TE.fixed * 100, ci_fixed, zval.fixed, p_fixed, NA, NA)) %>%
-        rbind(list("Random", TE.random * 100, ci_random, zval.random, p_random, NA, NA))
+        rbind(list("Fixed", nrow(data), TE.fixed * 100, ci_fixed, zval.fixed, p_fixed, NA, NA, FALSE)) %>%
+        rbind(list("Random", nrow(data), TE.random * 100, ci_random, zval.random, p_random, NA, NA, FALSE)) %>%
+        rbind(list("Prediction", NA, NA, ci_predict, NA, NA, NA, NA, FALSE))
     )
 
   } else if(type == "bias") {
     tbl <- with(bias, tibble::tibble(
+      "N"    = sum(!x$exclude),
       "B"    = estimate[["bias"]],
       "SE"   = estimate[["se.bias"]],
       "p"    = getPval(bias),
@@ -170,9 +175,9 @@ mkReport <- function(meta_list, report_type = "meta", ...) {
   #' @param ... Arguments being passed on to `reportMeta`
   #' @return A table or list of tables for rendering the report
   res <- iterateReport(meta_list, type = report_type, ...) %>%
-      extract(sapply(., is.data.frame)) %>%
-      {do.call(rbind, .)} %>%
-      tibble::add_column("Label" = gsub(x = rownames(.), "\\..*", ""), .before = 1)
+    extract(sapply(., is.data.frame)) %>%
+    {do.call(rbind, .)} %>%
+    tibble::add_column("Label" = gsub(x = rownames(.), "\\..*", ""), .before = 1)
 
   return(res)
 }
