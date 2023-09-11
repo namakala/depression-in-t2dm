@@ -24,11 +24,6 @@ header-includes:
 pkgs <- c("magrittr", "targets", "kableExtra")
 pkgs_load <- sapply(pkgs, library, character.only = TRUE)
 
-funs <- sapply(
-  list.files("../src/R", recursive = TRUE, pattern = "*.R", full.names = TRUE),
-  source
-)
-
 options(digits = 2)
 options(knitr.kable.NA = "")
 
@@ -80,9 +75,11 @@ es_author <- getES(tar_read(meta_author)) %>%
   extract2("%") %>%
   mean(na.rm = TRUE)
 
+tar_load(meta_reg)
+
 ```
 
-# Executive Summary
+# Executive Summary {-}
 
 - Two datasets are used:
   - Raw data: Includes all extracted studies, still contains duplicates (N = `r nrow(tar_read(tbl))`)
@@ -112,13 +109,15 @@ es_author <- getES(tar_read(meta_author)) %>%
     - Grouped by psychometric instrument: `r es_eda["clean_instrument"]`%
   - Considering the number of outliers and differences between EDA result and whole dataset meta-analysis, it appears that subgroup analysis is necessary
   - Results from subgroup analysis in @sec-subgroup indicates higher within difference than between difference, implying high variance even within the subgroup
-  - Meta-regression indicates a growing prevalence of depression at the rate of 0.13% [0 - 0.25%] per year
+  - Meta-regression indicates a growing prevalence of depression at the rate of `r round(meta_reg$b[2] * 100, 2)`% per year
 - What to include in the report?
   - @tbl-bias-author
   - @tbl-bias-all
   - @tbl-meta-all
   - @sec-subgroup-year
   - @sec-subgroup-criteria
+  - @sec-metareg
+  - @fig-metareg
 
 {{< pagebreak >}}
 
@@ -300,14 +299,26 @@ report_subgroup(
 
 ```
 
+{{< pagebreak >}}
+
+# Meta-regression {#sec-metareg}
+
+```{r}
+#| fig-cap: Diagnostic plot of the meta-regression model
+#| fig-pos: H
+
+tar_read(meta_reg) %T>%
+  plot()
+
+```
+
 \newpage
 \KOMAoptions{paper=landscape,pagesize}
 \recalctypearea
 
-# Meta-regression
-
 ```{r fig-metareg}
 #| fig-cap: Bubble plot on a meta-regression model incorporating year and diagnostic criteria as covariates in determining the prevalence of depression
+#| fig-pos: H
 
 tar_read(plt_metareg)
 
@@ -316,10 +327,3 @@ tar_read(plt_metareg)
 \newpage
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
-
-```{r}
-
-tar_read(meta_reg) %T>%
-  plot()
-
-```
