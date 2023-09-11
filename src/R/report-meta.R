@@ -1,20 +1,49 @@
 # Functions to report meta-analysis results
 
-vizMeta <- function(meta_res, ...) {
-  #' Visualize Meta-Analysis
+vizMetareg <- function(meta_reg, ...) {
+  #' Visualize Meta-Regression
   #'
-  #' Visualize the forest and funnel plot
+  #' Generate bubble plot to visualize the meta regression
   #'
-  #' @param meta_res A meta-analysis object
-  #' @return List of figures
-  meta <- meta_res$x
-  figs <- list(
-    "funnel"  = meta::funnel(meta),
-    "forest"  = meta::forest(meta, ref = 0, sortvar = TE),
-    "drapery" = meta::drapery(meta, type = "pval")
+  #' @param meta_reg A meta-regression object from `meta::metareg`
+  #' @return GGPlot2 object
+  require("ggplot2")
+  tbl <- meta_reg$data %>%
+    inset2("weight", value = 1 / sqrt(meta_reg$vi.f))
+
+  subtitle <- sprintf(
+    "Meta-Regression on %s primary studies from %s to %s, where only %s studies relies on clinical diagnosis",
+    sum(!is.na(tbl$.TE)),
+    min(tbl$year),
+    max(tbl$year),
+    tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
   )
 
-  return(figs)
+  eq <- with(meta_reg,
+    sprintf(
+      "'Prevalence (%%)' == %s %s * x[1] %s * x[2]",
+      round(100 * b[1], 2),
+      round(100 * b[2], 2) %>% {ifelse(. > 0, paste0("+", .), .)},
+      round(100 * b[3], 2) %>% {ifelse(. > 0, paste0("+", .), .)}
+    )
+  )
+
+  plt <- ggplot(tbl, aes(x = year, y = .TE, size = weight)) +
+    geom_abline(intercept = meta_reg$b[1], slope = meta_reg$b[2], linewidth = 1, colour = "#434C5E") +
+    geom_point(alpha = 0.7, aes(color = clean_criteria)) +
+    annotate("text", x = 1998, y = 0.29, parse = TRUE, label = eq) +
+    scale_y_continuous(labels = scales::percent) +
+    scale_size(guide = "none") +
+    guides(color = guide_legend("")) +
+    labs(
+      title = "Annual increase of depression prevalence among T2DM patients",
+      subtitle = subtitle,
+      x = "Year of Publication", y = "Depression Prevalence"
+    ) +
+    theme_minimal() +
+    theme(legend.position = c(0, 0.95), legend.direction = "horizontal", legend.justification = c("left", "bottom"))
+
+  return(plt)
 }
 
 getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE) {

@@ -40,6 +40,7 @@ list(
   tar_target(subgroup_analysis, lapply(itergroup, \(group) fitSubgroup(pooled_all, group))),
   tar_target(meta_subgroup, lapply(subgroup_analysis, \(group) reportMeta(group, type = "subgroup"))),
   tar_target(meta_reg, fitRegression(pooled_all, ~ year + clean_criteria)),
+  tar_target(plt_metareg, vizMetareg(meta_reg)),
   tar_quarto(readme, "README.qmd"),
   tar_quarto(report, "draft/report.qmd")
 )

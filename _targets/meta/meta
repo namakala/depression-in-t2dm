@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|c26237355c0ed4bf|||||||||||||||
+.Random.seed|object|134ea33abc593551|||||||||||||||
 bias_all|stem|cb0e9464165ffdff|c14a730bef103184|afdb0891e9b31c9a|-1911514426||t19611.4295174217s|63e93e2f7d34d063|270|rds|local|vector|||0.002||
 bias_author|stem|1fb91d0b5ca76876|71b35098f0a9b34e|082eb70c5ab519d3|2144877273||t19611.4295159171s|51ec3f10470a15d2|1777|rds|local|vector|||0.109||
 bias_eda|stem|eea9a2767c2f1cab|e33d8d8235ab096c|2d0a919340af0d75|-308918961||t19611.4295196092s|f171c819e7dfe77f|3725|rds|local|vector|||0.136||
@@ -22,6 +22,7 @@ meta_eda|stem|a3f482cbb17078e5|9cc5a0c73beac323|2d0a919340af0d75|885042569||t196
 meta_reg|stem|c3129a53a1aea49b|6c0b154cd2b9c3d6|34400907c9305a30|830353233||t19611.3664027692s|04a5960f5aee9352|803811|rds|local|vector|||1.41|1 study with NAs omitted from model fitting.|
 meta_subgroup|stem|a627559891c0a278|83a62a87f826e123|219419b58054aeeb|237927305||t19611.4295248871s|f3f399aee98ed775|5467|rds|local|vector|||0.011||
 mkReport|function|33cb5ff7841c0a91|||||||||||||||
+plt_metareg|stem|00bf358f108a477c|04347e4e26c3bae8|26934e07ec2732ec|1474045817||t19611.5769215623s|3da57fff08b84176|1163265|rds|local|vector|||0.188||
 pooled_all|stem|9f354ad5f83aee5f|60e58434911d3a6e|9395dc2f5d4b6fce|-423812476||t19610.8702990269s|947b80fac5bdca87|90667|rds|local|vector|||1.92|NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
 pooled_author|stem|0633c5a4d9ec2889|2903448c1449ed67|c57082665fdc9d27|-102118361||t19610.8702729155s|39d6113669859b7c|99495|rds|local|vector|||5.585|NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
 pooled_groups|stem|09eec1627cf67aa5|3a98a3a5284d9d5c|90cfdf459f655fa2|121320716||t19610.8704358223s|5a53ccc35fcf9f38|413871|rds|local|vector|||11.724|NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. Fisher scoring algorithm may have gotten stuck at a local maximum.Setting tau2  0. Check the profile likelihood plot with profile.|
@@ -29,7 +30,7 @@ poolES|function|0070f2542c8d23f4|||||||||||||||
 raw|object|11573ee32a0a140e|||||||||||||||
 readData|function|c8d3cc417d0d13fb|||||||||||||||
 readme|stem|b9aa77575926845c|c2c4b6e3bcf05d55|d84d7cdd1c3c4b08|-165896733|README.md*README.qmd|t19611.3308325341s|774da3f6ef14f1f9|9143|file|local|vector|||11.772||
-report|stem|b968cf5688d1bf1b|3fe0dc3d18b18fd1|d09bfcfb84602cf4|-237041703|draft/report.pdf*draft/report.qmd|t19611.5017740997s|eb90474931b6eacd|277136|file|local|vector|||19.323||
+report|stem|35dde7d578113995|bd7f1968fdfa8d39|815cfbb2558ada88|-237041703|draft/report.pdf*draft/report.qmd|t19611.5771973522s|300e09f93fa6a20b|292463|file|local|vector|||23.789||
 reportCI|function|c2d066d831d6fd03|||||||||||||||
 reportMeta|function|2c9134309aabddb1|||||||||||||||
 subgroup_analysis|stem|71414438060f66c1|e50ffde0befe6f10|4d3d810c3edb86da|1099025760||t19611.3661372573s|eaf2ea30dac73a66|403283|rds|local|vector|||5.839||
@@ -37,3 +38,4 @@ tbl|stem|437e3619450f259e|2741c2d70e72a160|cce2e18371c2df42|1728411417||t19610.8
 tbl_clean|stem|5e83e9c85be19d3a|d770d631dc7e2c2e|06222fdc2892a982|-798661904||t19610.8702731586s|8085d119a58bcc8d|33399|rds|local|vector|||0.004|NAs introduced by coercion|
 test|function|1f7d0f6c33d74fb4|||||||||||||||
 vizMeta|function|315d4b7be5ffbec5|||||||||||||||
+vizMetareg|function|bc90eb125d0b40de|||||||||||||||

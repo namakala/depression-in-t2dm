@@ -300,7 +300,22 @@ report_subgroup(
 
 ```
 
+\newpage
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
 # Meta-regression
+
+```{r fig-metareg}
+#| fig-cap: Bubble plot on a meta-regression model incorporating year and diagnostic criteria as covariates in determining the prevalence of depression
+
+tar_read(plt_metareg)
+
+```
+
+\newpage
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
 
 ```{r}
 
