@@ -20,7 +20,8 @@ sapply(
 # Set group of variables to iterate the meta analysis
 itergroup <- c(
   "year", paste("clean", c("country", "criteria", "instrument"), sep = "_")
-)
+) %>%
+  set_names(., .)
 
 # Initiate analysis pipeline
 list(
@@ -36,6 +37,8 @@ list(
   tar_target(bias_eda, lapply(pooled_groups, mkReport, report_type = "bias")),
   tar_target(meta_all, reportMeta(pooled_all, type = "meta")),
   tar_target(bias_all, reportMeta(pooled_all, type = "bias")),
+  tar_target(subgroup_analysis, lapply(itergroup, \(group) fitSubgroup(pooled_all, group))),
+  tar_target(meta_reg, fitRegression(pooled_all, ~ year + clean_criteria)),
   tar_quarto(readme, "README.qmd"),
   tar_quarto(report, "draft/report.qmd")
 )

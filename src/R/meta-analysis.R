@@ -98,3 +98,40 @@ iterate <- function(tbl, groupvar, ...) {
   return(res)
 }
 
+fitSubgroup <- function(meta_res, group, ...) {
+  #' Subgroup Meta-Analysis
+  #'
+  #' Perform subgroup meta-analysis for the included grouping variable
+  #'
+  #' @param meta_res Meta-analysis object obtained from `poolES` with the class
+  #' of `metabias`
+  #' @param group A character vector indicating the grouping variable included
+  #' in the meta-analysis object
+  #' @inheritDotParams meta::update.meta
+  bias <- meta_res
+  mod  <- bias$x
+  res  <- meta::update.meta(
+    mod,
+    subgroup = get(group),
+    ...
+  )
+
+  return(res)
+}
+
+fitRegression <- function(meta_res, form, ...) {
+  #' Fit Meta Regression
+  #'
+  #' Fit a regression modle into a meta-analysis object
+  #'
+  #' @param meta_res Meta-analysis object obtained from `poolES` with the class
+  #' of `metabias`
+  #' @param form A formula for fitting the regression line
+  #' @inheritDotParams meta::metareg
+  #' @return A fitted meta-regression model
+  bias <- meta_res
+  mod  <- bias$x
+  res  <- meta::metareg(mod, form, intercept = TRUE, ...)
+
+  return(res)
+}

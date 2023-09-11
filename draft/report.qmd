@@ -90,12 +90,14 @@ es_author <- getES(tar_read(meta_author)) %>%
     - Extracted studies which 95% CI expands beyond the pooled confidence interval is regarded as outliers
     - Outliers were removed when pooling the effect size in favor of improving the homogeneity:
       - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies without outliers
-      - EDA grouped by year contains `r n_eda["year"]` studies without outliers
+      - Exploratory data analysis (EDA) grouped by year contains `r n_eda["year"]` studies without outliers
       - EDA grouped by country contains `r n_eda["clean_country"]` studies without outliers
       - EDA grouped by diagnostic criteria contains `r n_eda["clean_criteria"]` studies without outliers
       - EDA grouped by psychometric instrument contains `r n_eda["clean_instrument"]` studies without outliers
       - Meta-analysis on whole clean data contains `r sum(tar_read(bias_all)$N)` studies without outliers
     - Random effect model is fitted for all meta-analysis procedure
+    - Subgroup meta-analysis in case of effect size differences when conducting the EDA procedure
+    - Meta-regression using subgroup variables as covariates
 - **Insight:**
   - Using whole clean data, I found that the prevalence of depression is `r es_all`
   - Meanwhile, EDA procedure resulted in the following mean of prevalence:
@@ -103,10 +105,13 @@ es_author <- getES(tar_read(meta_author)) %>%
     - Grouped by country: `r es_eda["clean_country"]`%
     - Grouped by diagnostic criteria: `r es_eda["clean_criteria"]`%
     - Grouped by psychometric instrument: `r es_eda["clean_instrument"]`%
-  - Considering the number of outliers and differences between EDA result and whole dataset meta-analysis, it appears that sub-group analysis is necessary
+  - Considering the number of outliers and differences between EDA result and whole dataset meta-analysis, it appears that subgroup analysis is necessary
+  - Results from subgroup analysis in @sec-subgroup indicates higher within difference than between difference, implying high variance even within the subgroup
+  - Meta-regression indicates a growing prevalence of depression at the rate of 0.13% [0 - 0.25%] per year
 - What to include in the report?
   - @tbl-bias-author
   - @tbl-bias-all
+  - @tbl-meta-all
   - @sec-subgroup-year
   - @sec-subgroup-criteria
 
@@ -246,13 +251,13 @@ meta_eda$clean_instrument %>% report_meta()
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
 
-# Sub-group Meta Analysis
+# Sub-group Meta Analysis {#sec-subgroup}
 
 ## Grouped by year {#sec-subgroup-year}
 
 ```{r lst-subgroup-year}
 
-meta::update.meta(tar_read(pooled_all)$x, subgroup = year)
+tar_read(subgroup_analysis)$year
 
 ```
 
@@ -260,7 +265,15 @@ meta::update.meta(tar_read(pooled_all)$x, subgroup = year)
 
 ```{r lst-subgroup-criteria}
 
-meta::update.meta(tar_read(pooled_all)$x, subgroup = clean_criteria)
+tar_read(subgroup_analysis)$clean_criteria
 
 ```
 
+# Meta-regression
+
+```{r}
+
+tar_read(meta_reg) %T>%
+  plot()
+
+```
