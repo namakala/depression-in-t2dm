@@ -24,6 +24,11 @@ header-includes:
 pkgs <- c("magrittr", "targets", "kableExtra")
 pkgs_load <- sapply(pkgs, library, character.only = TRUE)
 
+funs <- sapply(
+  list.files("../src/R", recursive = TRUE, pattern = "*.R", full.names = TRUE),
+  source
+)
+
 options(digits = 2)
 options(knitr.kable.NA = "")
 
@@ -31,7 +36,7 @@ report_bias <- function(bias) {
   res <- bias %>%
     subset(select = -c(tau, Rb)) %>%
     kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
-      "Label", "N", "$\\beta$", "SE", "$p$", "$I^2$", "$H^2$", "$\\tau^2$"
+      "Label", "N", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
     )) %>%
     add_header_above(c(" " = 2, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
     kable_styling(font_size = 7, latex_options = c("repeat_header"))
@@ -145,7 +150,7 @@ tar_read(meta_author) %>% report_meta()
 tar_read(bias_all) %>%
   subset(select = -c(tau, Rb)) %>%
   kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
-    "N", "$\\beta$", "SE", "$p$", "$I^2$", "$H^2$", "$\\tau^2$"
+    "N", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
   )) %>%
   add_header_above(c(" " = 1, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
   kable_styling(font_size = 7, latex_options = c("repeat_header"))
@@ -169,7 +174,6 @@ sub_meta %>%
   kable_styling(font_size = 7, latex_options = c("repeat_header"))
 
 ```
-
 
 ## Grouped by year
 
@@ -257,7 +261,31 @@ meta_eda$clean_instrument %>% report_meta()
 
 ```{r lst-subgroup-year}
 
-tar_read(subgroup_analysis)$year
+report_subgroup <- function(mod, meta) {
+  note <- sprintf(
+    "Random model: Q = %s, df = %s, p = %s. Common model: Q = %s, df = %s, p = %s",
+    round(mod$Q.b.random, 2),
+    round(mod$df.Q.b.random, 2),
+    round(mod$pval.Q.b.random, 3),
+    round(mod$Q.b.common, 2),
+    round(mod$df.Q.b.common, 2),
+    round(mod$pval.Q.b.common, 3)
+  )
+
+  res <- meta %>%
+    kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
+      "Label", "N", "Fixed (\\%)", "Random (\\%)", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+    )) %>%
+    add_header_above(c(" " = 2, "Prevalence [95% CI]" = 2, "Heterogeneity" = 3)) %>%
+    footnote(general = note, general_title = "Between group differences") %>%
+    kable_styling(font_size = 10, latex_options = c("repeat_header"))
+  return(res)
+}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$year,
+  tar_read(meta_subgroup)$year
+)
 
 ```
 
@@ -265,7 +293,10 @@ tar_read(subgroup_analysis)$year
 
 ```{r lst-subgroup-criteria}
 
-tar_read(subgroup_analysis)$clean_criteria
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_criteria,
+  tar_read(meta_subgroup)$clean_criteria
+)
 
 ```
 
