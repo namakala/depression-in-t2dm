@@ -31,7 +31,7 @@ report_bias <- function(bias) {
   res <- bias %>%
     subset(select = -c(tau, Rb)) %>%
     kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
-      "Label", "N", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+      "Label", "K", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
     )) %>%
     add_header_above(c(" " = 2, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
     kable_styling(font_size = 7, latex_options = c("repeat_header"))
@@ -228,7 +228,8 @@ meta_eda$clean_criteria %>% report_meta()
 
 ```
 
-\newpage
+{{< pagebreak >}}
+
 \KOMAoptions{paper=landscape,pagesize}
 \recalctypearea
 
@@ -250,13 +251,14 @@ meta_eda$clean_instrument %>% report_meta()
 
 ```
 
-\newpage
+{{< pagebreak >}}
+
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
 
 # Sub-group Meta Analysis {#sec-subgroup}
 
-## Grouped by year {#sec-subgroup-year}
+## Grouped by year of review {#sec-subgroup-year}
 
 ```{r lst-subgroup-year}
 
@@ -273,7 +275,7 @@ report_subgroup <- function(mod, meta) {
 
   res <- meta %>%
     kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
-      "Label", "N", "Fixed (\\%)", "Random (\\%)", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+      "Label", "K", "Fixed (\\%)", "Random (\\%)", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
     )) %>%
     add_header_above(c(" " = 2, "Prevalence [95% CI]" = 2, "Heterogeneity" = 3)) %>%
     footnote(general = note, general_title = "Between group differences") %>%
@@ -284,6 +286,28 @@ report_subgroup <- function(mod, meta) {
 report_subgroup(
   tar_read(subgroup_analysis)$year,
   tar_read(meta_subgroup)$year
+)
+
+```
+
+## Grouped by published year {#sec-subgroup-criteria}
+
+```{r lst-subgroup-incl-year}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$incl_year,
+  tar_read(meta_subgroup)$incl_year
+)
+
+```
+
+## Grouped by country {#sec-subgroup-country}
+
+```{r lst-subgroup-country}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_country,
+  tar_read(meta_subgroup)$clean_country %>% {.[order(.$N, decreasing = TRUE), ]}
 )
 
 ```
@@ -301,6 +325,25 @@ report_subgroup(
 
 {{< pagebreak >}}
 
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+## Grouped by instrument {#sec-subgroup-instrument}
+
+```{r lst-subgroup-instrument}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_instrument,
+  tar_read(meta_subgroup)$clean_instrument %>% {.[order(.$N, decreasing = TRUE), ]}
+)
+
+```
+
+{{< pagebreak >}}
+
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+
 # Meta-regression {#sec-metareg}
 
 ```{r}
@@ -312,7 +355,8 @@ tar_read(meta_reg) %T>%
 
 ```
 
-\newpage
+{{< pagebreak >}}
+
 \KOMAoptions{paper=landscape,pagesize}
 \recalctypearea
 
@@ -324,6 +368,7 @@ tar_read(plt_metareg)
 
 ```
 
-\newpage
+{{< pagebreak >}}
+
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
