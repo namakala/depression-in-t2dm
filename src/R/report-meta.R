@@ -14,8 +14,8 @@ vizMetareg <- function(meta_reg, ...) {
   subtitle <- sprintf(
     "Meta-Regression on %s primary studies from %s to %s, where only %s studies relies on clinical diagnosis",
     sum(!is.na(tbl$.TE)),
-    min(tbl$year),
-    max(tbl$year),
+    min(tbl$incl_year),
+    max(tbl$incl_year),
     tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
   )
 
@@ -28,7 +28,7 @@ vizMetareg <- function(meta_reg, ...) {
     )
   )
 
-  plt <- ggplot(tbl, aes(x = year, y = .TE, size = weight)) +
+  plt <- ggplot(tbl, aes(x = incl_year, y = .TE, size = weight)) +
     geom_abline(intercept = meta_reg$b[1], slope = meta_reg$b[2], linewidth = 1, colour = "#434C5E") +
     geom_point(alpha = 0.7, aes(color = clean_criteria)) +
     annotate("text", x = 1998, y = 0.29, parse = TRUE, label = eq) +
@@ -199,7 +199,9 @@ reportMeta <- function(meta_res, type = "meta", ...) {
       "tau2"   = round(tau2.w, 3)
     ))
 
-    res <- tbl
+    sub_tbl <- tbl %>% subset(.$N > 0)
+
+    res <- sub_tbl
   }
 
   return(res)
