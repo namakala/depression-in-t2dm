@@ -9,13 +9,14 @@ readData <- function(path, ...) {
   #' @inheritDotParams readr::read_csv()
   #' @return A tibble data frame
   tbl <- readr::read_csv(file = path, ...) %>%
+    cleanData() %>%
+    subset(!is.na(.$incl_year)) %>%
     inset2("author_year", value = sprintf(
       "%s (%s)", gsub(x = .$author, "^(\\w+).*", "\\1"), .$year
     )) %>%
     inset2("incl_author_year", value = sprintf(
       "%s (%s)", gsub(x = .$incl_author, "^(\\w+).*", "\\1"), .$incl_year
-    )) %>%
-    cleanData()
+    ))
 
   return(tbl)
 }
@@ -28,6 +29,7 @@ cleanData <- function(tbl) {
   #' @param tbl A data frame object containing extracted studies
   #' @return A table with clean variables
   tbl_clean <- tbl %>%
+    inset2("incl_year", value = as.numeric(.$incl_year)) %>%
     inset2("clean_criteria", value = .$criteria %>% {ifelse(
       grepl(x = ., "(interview|diagnosis|history|medical)"),
       "Clinical Diagnosis",
@@ -35,11 +37,13 @@ cleanData <- function(tbl) {
     )}) %>%
     inset2("clean_country", value = {
       .$country %>%
-        ifelse(grepl(x = ., "(^US|Carolin|Califor)", ignore.case = TRUE), "USA", .) %>%
-        ifelse(is.na(.) | grepl(x = ., "-"), "Global", .) %>%
+        ifelse(grepl(x = ., "(^US|Carolin|Califor|Maryland|Chicago)", ignore.case = TRUE), "USA", .) %>%
+        ifelse(is.na(.) | grepl(x = ., "-|report|multic|unavail", ignore.case = TRUE), "Global", .) %>%
         ifelse(grepl(x = ., "Netherlands", ignore.case = TRUE), "Netherlands", .) %>%
         ifelse(grepl(x = ., "UK|England"), "UK", .) %>%
         ifelse(grepl(x = ., "China"), "China", .) %>%
+        ifelse(grepl(x = ., "Saudi"), "Saudi Arabia", .) %>%
+        ifelse(grepl(x = ., "Korea"), "South Korea", .) %>%
         ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)
     }) %>%
     inset2("clean_instrument", value = {
