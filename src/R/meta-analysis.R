@@ -9,10 +9,13 @@ finder <- function(regex) {
   #' etc.
   #' @return Standardized type of effect size
   estype <- list(
-    "prop" = c("proportion", "prevalence"),
-    "mean" = c("mean", "average", "SMD", "MD"),
-    "corr" = c("correlation", "pearson"),
-    "odds" = c("odds", "logit")
+    "prop"    = c("proportion", "prevalence", "PRAW"),
+    "mean"    = c("mean", "average", "SMD", "MD"),
+    "corr"    = c("correlation", "pearson"),
+    "odds"    = c("odds"),
+    "logit"   = c("logit", "PLOGIT"),
+    "arcsine" = c("arcsine", "PAS", "asin"),
+    "tukey"   = c("tukey", "PFT", "double_arcsine", "double_asin")
   )
 
   id <- grep(x = estype, pattern = regex, ignore.case = TRUE)
@@ -30,6 +33,7 @@ calcSE <- function(params, type = "prop") {
   #'
   #' Calculate standard error from the given effect size based on
   #' https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html
+  #' https://github.com/guido-s/meta/blob/37b707495725f1bf44c008a604c69b122794cad1/R/metaprop.R
   #'
   #' @param params A list of parameters required to compute the effect size
   #' @param type Type of effect size
@@ -41,6 +45,16 @@ calcSE <- function(params, type = "prop") {
     p  <- params$p
     n  <- params$n
     se <- sqrt({p * (1 - p)} / n)
+  } else if (type == "logit") {
+    n     <- params$n
+    event <- round(params$p * params$n)
+    se    <- sqrt({1 / event} + {1 / {n - event}})
+  } else if (type == "arcsine") {
+    n  <- params$n
+    se <- sqrt(1 / (4 * n))
+  } else if(type == "tukey") {
+    n  <- params$n
+    se <- sqrt(1 / (4 * n + 2))
   } else {
     se <- NULL
   }
@@ -56,10 +70,36 @@ poolES <- function(tbl, ...) {
   #' @param tbl A data frame containing extracted information
   #' @inheritDotParams meta::metagen
   #' @return Pooled effect size using `meta` package
+  args   <- c(as.list(environment()), list(...))
   params <- with(tbl, list("n" = n_diabet, "p" = prev_diabet))
-  res    <- meta::metagen(
-    TE = as.numeric(prev_diabet),
-    seTE = calcSE(params),
+
+  if (hasArg(sm)) {
+    n <- params$n
+    p <- params$p
+    event <- as.numeric(n) * as.numeric(p)
+
+    seTE  <- calcSE(params, type = args$sm)
+
+    if (args$sm == "PRAW") {
+      TE <- as.numeric(tbl$prev_diabet)
+    } else if (args$sm == "PLOGIT") {
+      TE <- log(event / {n - event})
+    } else if (args$sm == "PAS") {
+      TE <- asin(sqrt(event / n))
+    } else if (args$sm == "PFT") {
+      asn1 <- asin(sqrt(event / {n + 1}))
+      asn2 <- asin(sqrt({event + 1} / {n + 1}))
+      TE   <- 0.5 * {asn1 + asn2}
+    }
+
+  } else {
+    TE   <- as.numeric(tbl$prev_diabet)
+    seTE <- calcSE(params, type = "prop")
+  }
+
+  res <- meta::metagen(
+    TE = TE,
+    seTE = seTE,
     data = tbl,
     studlab = incl_author_year,
     prediction = TRUE,
