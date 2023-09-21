@@ -41,19 +41,17 @@ calcSE <- function(params, type = "prop") {
   params %<>% lapply(as.numeric)
   type   %<>% finder()
 
+  p     <- params$p
+  n     <- params$n
+  event <- round(p * n)
+
   if (type == "prop") {
-    p  <- params$p
-    n  <- params$n
     se <- sqrt({p * (1 - p)} / n)
   } else if (type == "logit") {
-    n     <- params$n
-    event <- round(params$p * params$n)
-    se    <- sqrt({1 / event} + {1 / {n - event}})
+    se <- sqrt({1 / event} + {1 / {n - event}})
   } else if (type == "arcsine") {
-    n  <- params$n
     se <- sqrt(1 / (4 * n))
   } else if(type == "tukey") {
-    n  <- params$n
     se <- sqrt(1 / (4 * n + 2))
   } else {
     se <- NULL
@@ -62,7 +60,7 @@ calcSE <- function(params, type = "prop") {
   return(se)
 }
 
-poolES <- function(tbl, ...) {
+poolES <- function(tbl, rm_outlier = TRUE, ...) {
   #' Pool Effect Size
   #'
   #' Pool the effect size for meta-analysis
@@ -71,7 +69,8 @@ poolES <- function(tbl, ...) {
   #' @inheritDotParams meta::metagen
   #' @return Pooled effect size using `meta` package
   args   <- c(as.list(environment()), list(...))
-  params <- with(tbl, list("n" = n_diabet, "p" = prev_diabet))
+  params <- with(tbl, list("n" = n_diabet, "p" = prev_diabet)) %>%
+    lapply(as.numeric)
 
   if (hasArg(sm)) {
     n <- params$n
@@ -81,7 +80,7 @@ poolES <- function(tbl, ...) {
     seTE  <- calcSE(params, type = args$sm)
 
     if (args$sm == "PRAW") {
-      TE <- as.numeric(tbl$prev_diabet)
+      TE <- p
     } else if (args$sm == "PLOGIT") {
       TE <- log(event / {n - event})
     } else if (args$sm == "PAS") {
@@ -93,7 +92,7 @@ poolES <- function(tbl, ...) {
     }
 
   } else {
-    TE   <- as.numeric(tbl$prev_diabet)
+    TE   <- params$p
     seTE <- calcSE(params, type = "prop")
   }
 
@@ -105,9 +104,15 @@ poolES <- function(tbl, ...) {
     prediction = TRUE,
     predict.seed = 1810,
     ...
-  ) %>%
-    dmetar::find.outliers() %>%
-    extract2("m.random") %>%
+  )
+
+  if (rm_outlier) {
+    res %<>%
+      dmetar::find.outliers() %>%
+      extract2("m.random")
+  }
+
+  res %<>%
     meta::metabias(method = "linreg", k.min = 5)
 
   return(res)
