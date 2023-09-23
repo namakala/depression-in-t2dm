@@ -1,6 +1,6 @@
 # Functions to report meta-analysis results
 
-vizMetareg <- function(meta_reg, ...) {
+vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   #' Visualize Meta-Regression
   #'
   #' Generate bubble plot to visualize the meta regression
@@ -11,13 +11,7 @@ vizMetareg <- function(meta_reg, ...) {
   tbl <- meta_reg$data %>%
     inset2("weight", value = 1 / sqrt(meta_reg$vi.f))
 
-  subtitle <- sprintf(
-    "Meta-Regression on %s primary studies from %s to %s, where only %s studies relies on clinical diagnosis",
-    sum(!is.na(tbl$.TE)),
-    min(tbl$incl_year),
-    max(tbl$incl_year),
-    tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
-  )
+  is_glmm <- any(class(meta_reg) == "rma.glmm")
 
   eq <- with(meta_reg,
     sprintf(
@@ -28,9 +22,35 @@ vizMetareg <- function(meta_reg, ...) {
     )
   )
 
-  plt <- ggplot(tbl, aes(x = incl_year, y = .TE, size = weight)) +
+  if (is_glmm) {
+
+    subtitle <- sprintf(
+      "Meta-Regression on %s primary studies from %s to %s, where only %s studies relies on clinical diagnosis",
+      sum(!is.na(tbl$.event)),
+      min(tbl$incl_year),
+      max(tbl$incl_year),
+      tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
+    )
+
+    canvas <- ggplot(tbl, aes(x = incl_year, y = .event / .n, size = weight))
+
+  } else {
+
+    subtitle <- sprintf(
+      "Meta-Regression on %s primary studies from %s to %s, where only %s studies relies on clinical diagnosis",
+      sum(!is.na(tbl$.TE)),
+      min(tbl$incl_year),
+      max(tbl$incl_year),
+      tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
+    )
+
+    canvas <- ggplot(tbl, aes(x = incl_year, y = .TE, size = weight))
+
+  }
+
+  plt <- canvas +
     geom_abline(intercept = meta_reg$b[1], slope = meta_reg$b[2], linewidth = 1, colour = "#434C5E") +
-    geom_point(alpha = 0.7, aes(color = clean_criteria)) +
+    geom_point(alpha = alpha, aes(color = clean_criteria)) +
     annotate("text", x = 1998, y = 0.29, parse = TRUE, label = eq) +
     scale_y_continuous(labels = scales::percent) +
     scale_size(guide = "none") +
@@ -133,9 +153,11 @@ reportMeta <- function(meta_res, type = "meta", ...) {
   if (any(class(meta_res) == "metabias")) {
     bias <- meta_res
     meta <- bias$x
-  } else if (any(class(meta_res) == "metagen")) {
+  } else if (any(class(meta_res) %in% c("metagen", "metaprop"))) {
     meta <- meta_res
   }
+
+  is_prop <- any(class(meta) == "metaprop")
 
   if (type == "meta") {
     ci         <- getCI(meta, lo = "lower", hi = "upper")
@@ -152,11 +174,11 @@ reportMeta <- function(meta_res, type = "meta", ...) {
       "fixed"  = w.fixed %>% {. / sum(.) * 100}
     )) %>%
       round(2)
-
+    
     tbl <- with(meta, tibble::tibble(
       "Author"  = studlab,
       "N"       = data$n_total,
-      "%"       = TE * 100,
+      "%"       = ifelse(is_prop, meta:::logit2p(TE), TE) * 100,
       "95% CI"  = ci,
       "Z"       = zval,
       "p"       = p,
@@ -192,8 +214,16 @@ reportMeta <- function(meta_res, type = "meta", ...) {
     tbl <- with(meta, tibble::tibble(
       "Group"  = names(TE.common.w),
       "N"      = k.w,
-      "Fixed"  = reportCI(se = seTE.fixed.w, m = TE.fixed.w, multiply = TRUE),
-      "Random" = reportCI(se = seTE.random.w, m = TE.random.w, multiply = TRUE),
+      "Fixed"  = reportCI(
+        se = seTE.fixed.w,
+        m  = ifelse(is_prop, meta:::logit2p(TE.fixed.w), TE.fixed.w),
+        multiply = TRUE
+      ),
+      "Random" = reportCI(
+        se = seTE.random.w,
+        m  = ifelse(is_prop, meta:::logit2p(TE.random.w), TE.random.w),
+        multiply = TRUE
+      ),
       "I2"     = round(I2.w * 100, 2),
       "H"      = round(H.w, 2),
       "tau2"   = round(tau2.w, 3)

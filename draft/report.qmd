@@ -301,17 +301,6 @@ report_subgroup(
 
 ```
 
-## Grouped by country {#sec-subgroup-country}
-
-```{r lst-subgroup-country}
-
-report_subgroup(
-  tar_read(subgroup_analysis)$clean_country,
-  tar_read(meta_subgroup)$clean_country %>% {.[order(.$N, decreasing = TRUE), ]}
-)
-
-```
-
 ## Grouped by criteria {#sec-subgroup-criteria}
 
 ```{r lst-subgroup-criteria}
@@ -323,6 +312,19 @@ report_subgroup(
 
 ```
 
+::: {.content-hidden}
+
+## Grouped by country {#sec-subgroup-country}
+
+```{r lst-subgroup-country, eval = FALSE}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_country,
+  tar_read(meta_subgroup)$clean_country %>% {.[order(.$N, decreasing = TRUE), ]}
+)
+
+```
+
 {{< pagebreak >}}
 
 \KOMAoptions{paper=landscape,pagesize}
@@ -330,7 +332,7 @@ report_subgroup(
 
 ## Grouped by instrument {#sec-subgroup-instrument}
 
-```{r lst-subgroup-instrument}
+```{r lst-subgroup-instrument, eval = FALSE}
 
 report_subgroup(
   tar_read(subgroup_analysis)$clean_instrument,
@@ -344,14 +346,16 @@ report_subgroup(
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
 
+:::
+
 # Meta-regression {#sec-metareg}
 
 ```{r}
 #| fig-cap: Diagnostic plot of the meta-regression model
 #| fig-pos: H
 
-tar_read(meta_reg) %T>%
-  plot()
+ #tar_read(meta_reg) %T>% plot()
+tar_read(meta_reg) %>% summary()
 
 ```
 

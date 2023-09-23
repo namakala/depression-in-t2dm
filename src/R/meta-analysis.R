@@ -28,6 +28,38 @@ finder <- function(regex) {
   return(estype)
 }
 
+calcTE <- function(params, type = "prop") {
+  #' Calculate Effect Size
+  #'
+  #' Calculate effect size based on
+  #' https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/effects.html
+  #' https://github.com/guido-s/meta/blob/37b707495725f1bf44c008a604c69b122794cad1/R/metaprop.R
+  #'
+  #' @param params A list of parameters required to compute the effect size
+  #' @param type Type of effect size or its transformation
+  #' @return An array of effect size
+  params %<>% lapply(as.numeric)
+  type   %<>% finder()
+
+  p     <- params$p
+  n     <- params$n
+  event <- round(p * n)
+
+  if (type == "prop") {
+    te <- p
+  } else if (type == "logit") {
+    te <- log(event / {n - event})
+  } else if (type == "arcsine") {
+    te <- asin(sqrt(event / n))
+  } else if (type == "tukey") {
+    asn1 <- asin(sqrt(event / {n + 1}))
+    asn2 <- asin(sqrt({event + 1} / {n + 1}))
+    te   <- 0.5 * {asn1 + asn2}
+  }
+
+  return(te)
+}
+
 calcSE <- function(params, type = "prop") {
   #' Calculate SE
   #'
@@ -66,45 +98,46 @@ poolES <- function(tbl, rm_outlier = TRUE, ...) {
   #' Pool the effect size for meta-analysis
   #'
   #' @param tbl A data frame containing extracted information
+  #' @param rm_outlier A boolean indicating whether to remove outlier or not
   #' @inheritDotParams meta::metagen
   #' @return Pooled effect size using `meta` package
   args   <- c(as.list(environment()), list(...))
   params <- with(tbl, list("n" = n_diabet, "p" = prev_diabet)) %>%
     lapply(as.numeric)
 
-  if (hasArg(sm)) {
-    n <- params$n
-    p <- params$p
-    event <- as.numeric(n) * as.numeric(p)
+  if (hasArg(method)) {
 
-    seTE  <- calcSE(params, type = args$sm)
-
-    if (args$sm == "PRAW") {
-      TE <- p
-    } else if (args$sm == "PLOGIT") {
-      TE <- log(event / {n - event})
-    } else if (args$sm == "PAS") {
-      TE <- asin(sqrt(event / n))
-    } else if (args$sm == "PFT") {
-      asn1 <- asin(sqrt(event / {n + 1}))
-      asn2 <- asin(sqrt({event + 1} / {n + 1}))
-      TE   <- 0.5 * {asn1 + asn2}
-    }
+    res <- meta::metaprop(
+      event = params$n * params$p,
+      n     = n_diabet,
+      data  = tbl,
+      studlab = incl_author_year,
+      prediction = TRUE,
+      predict.seed = 1810,
+      ...
+    )
 
   } else {
-    TE   <- params$p
-    seTE <- calcSE(params, type = "prop")
-  }
 
-  res <- meta::metagen(
-    TE = TE,
-    seTE = seTE,
-    data = tbl,
-    studlab = incl_author_year,
-    prediction = TRUE,
-    predict.seed = 1810,
-    ...
-  )
+    if (hasArg(sm)) {
+      TE   <- calcTE(params, type = args$sm)
+      seTE <- calcSE(params, type = args$sm)
+    } else {
+      TE   <- params$p
+      seTE <- calcSE(params, type = "prop")
+    }
+
+    res <- meta::metagen(
+      TE = TE,
+      seTE = seTE,
+      data = tbl,
+      studlab = incl_author_year,
+      prediction = TRUE,
+      predict.seed = 1810,
+      ...
+    )
+
+  }
 
   if (rm_outlier) {
     res %<>%
