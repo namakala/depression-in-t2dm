@@ -1,8 +1,8 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|ade92d02994ddde3|||||||||||||||
-bias_all|stem|07e16cae64645302|c14a730bef103184|2c07d658ab649594|-1911514426||t19623.9162268392s|efa41a4afcb89295|262|rds|local|vector|||0.069||
-bias_author|stem|479093b6a46a94ac|71b35098f0a9b34e|e363a4fc75189b10|2144877273||t19623.9125430224s|2eff412e1fe68411|1770|rds|local|vector|||0.121||
-bias_eda|stem|acb0b5cd60d06925|e33d8d8235ab096c|57487e472d8dba72|-308918961||t19623.9064333048s|b4d03c2f5e3a0dd1|4752|rds|local|vector|||0.21||
+.Random.seed|object|c3d5523bdced5538|||||||||||||||
+bias_all|stem|07e16cae64645302|c14a730bef103184|d0d816ed44af841d|-1911514426||t19625.4985473751s|efa41a4afcb89295|262|rds|local|vector|||0.003||
+bias_author|stem|479093b6a46a94ac|71b35098f0a9b34e|8c867731afc7120f|2144877273||t19625.4985159978s|2eff412e1fe68411|1770|rds|local|vector|||0.135||
+bias_eda|stem|acb0b5cd60d06925|e33d8d8235ab096c|5389341642130e10|-308918961||t19625.4985504769s|b4d03c2f5e3a0dd1|4752|rds|local|vector|||0.204||
 calcSE|function|c3656744d1b8b954|||||||||||||||
 calcTE|function|52eda69da9eaa1b5|||||||||||||||
 cleanData|function|5c8d6e6eb588b79e|||||||||||||||
@@ -12,17 +12,17 @@ findCol|function|5b2a8b848e8f1661|||||||||||||||
 finder|function|9c13b0c790b5c182|||||||||||||||
 fitRegression|function|e0adf854c000afb7|||||||||||||||
 fitSubgroup|function|d92d37a71ca80033|||||||||||||||
-getCI|function|2387848c79bc0a53|||||||||||||||
+getCI|function|124336762ed39ff9|||||||||||||||
 getPval|function|e5d656dd87d9dd2b|||||||||||||||
 iterate|function|0c1ace28eca8afee|||||||||||||||
-iterateReport|function|2a717b34cfce183c|||||||||||||||
+iterateReport|function|0ed17124d8607fab|||||||||||||||
 itergroup|object|8970362c817525d6|||||||||||||||
-meta_all|stem|df494b1aa040af89|d70b762553ffccff|2c07d658ab649594|720523509||t19623.9162270475s|f312e868ffd678c3|11061|rds|local|vector|||0.012||
-meta_author|stem|38fc4cb7b994d15c|278193674bcc4c6c|e363a4fc75189b10|-562273166||t19623.9125443071s|f255d196e49c7249|22346|rds|local|vector|||0.103||
-meta_eda|stem|69ba583715c05437|9cc5a0c73beac323|57487e472d8dba72|885042569||t19623.906440446s|58e88100b6da381e|101167|rds|local|vector|||0.593||
+meta_all|stem|df494b1aa040af89|d70b762553ffccff|d0d816ed44af841d|720523509||t19625.4985475139s|f312e868ffd678c3|11061|rds|local|vector|||0.006||
+meta_author|stem|38fc4cb7b994d15c|278193674bcc4c6c|8c867731afc7120f|-562273166||t19625.4985173982s|f255d196e49c7249|22346|rds|local|vector|||0.103||
+meta_eda|stem|69ba583715c05437|9cc5a0c73beac323|5389341642130e10|885042569||t19625.4985576297s|58e88100b6da381e|101167|rds|local|vector|||0.596||
 meta_reg|stem|2b07fc4a608bf079|25d0e55d39340271|3df3a7a2d47790a8|830353233||t19623.9162879155s|122793ea5e97b1d3|3554679|rds|local|vector|||0.273|1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm|
-meta_subgroup|stem|b9912acab0a9d533|83a62a87f826e123|1b716e66381fff2e|237927305||t19623.916288309s|2b0f1a72a833918a|2931|rds|local|vector|||0.009||
-mkReport|function|49bcacdff89a9371|||||||||||||||
+meta_subgroup|stem|965d0782d415b687|83a62a87f826e123|06654324aac59123|237927305||t19625.4985630695s|6c6ae0e978f9429c|3729|rds|local|vector|||0.013||
+mkReport|function|72a25e527994e571|||||||||||||||
 plt_metareg|stem|e7470b1ea91d48c3|04347e4e26c3bae8|fac82d62329649c3|1474045817||t19623.9163466655s|55357bb54ed3a8ef|3922294|rds|local|vector|||0.101||
 pooled_all|stem|e447cd6421e71cc2|ed54d634e22c270a|da5432353cb3f903|-423812476||t19623.9079824122s|e83e928b36043f11|746597|rds|local|vector|||3.712|NAs introduced by coercion. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Studies with NAs not considered in outlier analysis.. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. 1 observations dropped due to missing values|
 pooled_author|stem|465988f2a2c42c7e|2903448c1449ed67|ea3b55856ef962cc|-102118361||t19623.9125414136s|5734aa2222774f94|97161|rds|local|vector|||5.697|NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
@@ -31,9 +31,9 @@ poolES|function|aa2abc4d847f6905|||||||||||||||
 raw|object|11573ee32a0a140e|||||||||||||||
 readData|function|82594432466153af|||||||||||||||
 readme|stem|b9aa77575926845c|c2c4b6e3bcf05d55|d84d7cdd1c3c4b08|-165896733|README.md*README.qmd|t19611.3308325341s|774da3f6ef14f1f9|9143|file|local|vector|||11.772||
-report|stem|8ac803c3b3248a5e|bd7f1968fdfa8d39|b859d55c66fa77ba|-237041703|draft/report.pdf*draft/report.qmd|t19623.9337116234s|b4eb2960f1314042|220292|file|local|vector|||24.089||
-reportCI|function|c2d066d831d6fd03|||||||||||||||
-reportMeta|function|1919e85b2564f0ad|||||||||||||||
+report|stem|ada737e6a3119a32|bd7f1968fdfa8d39|11aba58ae17034cb|-237041703|draft/report.pdf*draft/report.qmd|t19625.4988679073s|1c37e323c9182ea4|220393|file|local|vector|||24.85||
+reportCI|function|abe233e60fd8fcdf|||||||||||||||
+reportMeta|function|6fa60fab3a2e5f00|||||||||||||||
 subgroup_analysis|stem|5aa4ae3be29cb4ca|7de68d0b3966e5b6|6ff761380bd2bec6|1099025760||t19623.9162257396s|06e78783d5f024f5|2851044|rds|local|vector|||46.108|1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Normal approximation confidence interval argument method.ci  NAsm used asa|
 tbl|stem|d5897f1b0a01e740|2741c2d70e72a160|92bc4c0d006f9030|1728411417||t19620.3035106591s|a2642a7376b48bde|27964|rds|local|vector|||0.25|NAs introduced by coercion|
 tbl_clean|stem|5afa40f867b86783|d770d631dc7e2c2e|61ec031e8e60477d|-798661904||t19620.3035625919s|6b4be8ce1bcc3335|32790|rds|local|vector|||0.003|NAs introduced by coercion|

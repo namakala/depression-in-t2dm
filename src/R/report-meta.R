@@ -66,7 +66,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   return(plt)
 }
 
-getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE) {
+getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE, ...) {
   #' Calculate the Confidence Interval
   #'
   #' Calculate the confidence interval from a meta-analysis object
@@ -77,6 +77,8 @@ getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, 
   #' @param se Standard error for calculating the confidence interval
   #' @param m Mean value for calculating the confidence interval
   #' @param multiply Boolean indicating whether to multiply by 100
+  #' @param ... Additional arguments for conditional statements, including
+  #' `logit2p` which transform logit into probability
   #' @return A vector of pretty confidence interval
   if (!is.null(meta)) {
     lo <- meta[[lo]]
@@ -84,6 +86,11 @@ getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, 
   } else if (!is.null(se)) {
     lo <- m - {1.96 * se}
     hi <- m + {1.96 * se}
+
+    if (hasArg(logit2p)) {
+      lo %<>% meta:::logit2p()
+      hi %<>% meta:::logit2p()
+    }
   }
 
   if (multiply) {
@@ -111,7 +118,7 @@ getPval <- function(meta, p = "pval") {
   return(pval)
 }
 
-reportCI <- function(meta = NULL, metric = NULL, se = NULL, m = NULL, multiply = FALSE) {
+reportCI <- function(meta = NULL, metric = NULL, se = NULL, m = NULL, multiply = FALSE, ...) {
   #' Report Confidence Interval
   #'
   #' Report confidence interval obtained from a meta-analysis object
@@ -122,7 +129,11 @@ reportCI <- function(meta = NULL, metric = NULL, se = NULL, m = NULL, multiply =
   #' @param se Standard error for calculating the confidence interval
   #' @param m Mean value for calculating the confidence interval
   #' @param multiply Boolean indicating whether to multiply by 100
+  #' @param ... Additional arguments for conditional statements passed on to
+  #' getCI
   #' @return A character object of confidence interval report
+  transmute <- hasArg(logit2p)
+
   if (!is.null(meta)) {
     params <- list(
       "lo" = sprintf("lower.%s", metric),
@@ -130,13 +141,18 @@ reportCI <- function(meta = NULL, metric = NULL, se = NULL, m = NULL, multiply =
     )
 
     m  <- meta[[metric]]
-    ci <- getCI(meta, lo = params$lo, hi = params$hi, multiply = multiply)
+    ci <- getCI(meta, lo = params$lo, hi = params$hi, multiply = multiply, ...)
 
   } else if (!is.null(se)) {
-    ci <- getCI(se = se, m = m, multiply = multiply)
+    ci <- getCI(se = se, m = m, multiply = multiply, ...)
   }
 
-  m %<>% sapply(\(x) x %>% {ifelse(multiply, . * 100, .)})
+  m %<>% sapply(function(meanval) {
+    meanval %>%
+      {ifelse(transmute, meta:::logit2p(.), .)} %>%
+      {ifelse(multiply, . * 100, .)}
+  })
+
   res <- sprintf("%s [%s]", round(m, 2), ci)
 
   return(res)
@@ -216,12 +232,14 @@ reportMeta <- function(meta_res, type = "meta", ...) {
       "N"      = k.w,
       "Fixed"  = reportCI(
         se = seTE.fixed.w,
-        m  = ifelse(is_prop, meta:::logit2p(TE.fixed.w), TE.fixed.w),
+        m  = TE.fixed.w,
+        logit2p  = TRUE,
         multiply = TRUE
       ),
       "Random" = reportCI(
         se = seTE.random.w,
-        m  = ifelse(is_prop, meta:::logit2p(TE.random.w), TE.random.w),
+        m  = TE.random.w,
+        logit2p  = TRUE,
         multiply = TRUE
       ),
       "I2"     = round(I2.w * 100, 2),
