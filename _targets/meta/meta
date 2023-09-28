@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|a38a37851853fcc9|||||||||||||||
+.Random.seed|object|c1076f59b943c6a8|||||||||||||||
 <<<<<<< HEAD|||||||||||||||||
 =======|||||||||||||||||
 >>>>>>> nightly|||||||||||||||||
@@ -32,11 +32,11 @@ meta_subgroup_glmm|stem|965d0782d415b687|812155e297b69910|0d54daa72d78a7d6|92192
 mkReport|function|0c5c286d3f3be9ac|||||||||||||||
 plt_metareg|stem|15b49ce4895e17a9|04347e4e26c3bae8|0581d9ce4d0e7762|1474045817||t19628.3457583791s|1e0a947f3dc65b16|1463403|rds|local|vector|||0.018||
 plt_metareg_glmm|stem|d88affa405d8ed2c|492c8509d3707020|78acd76c23fd513e|458293673||t19628.3457548663s|2d92510729ef3b87|4236379|rds|local|vector|||0.064||
+poolES|function|aa2abc4d847f6905|||||||||||||||
 pooled_all|stem|d7e417cb8e2cd9bd|60e58434911d3a6e|da5432353cb3f903|-423812476||t19628.3454062526s|67de2e6e34268959|89249|rds|local|vector|||1.318|NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
 pooled_author|stem|f623102bbd70bb59|2903448c1449ed67|ea3b55856ef962cc|-102118361||t19628.3353462323s|6abd33ab4093f14c|97167|rds|local|vector|||4.822|NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values|
 pooled_glmm|stem|4a1a0ca335989b05|ed54d634e22c270a|da5432353cb3f903|-416277032||t19628.345390802s|21d446d6737ff1a6|746794|rds|local|vector|||3.518|NAs introduced by coercion. Normal approximation confidence interval argument method.ci  NAsm used asat least one number of events contains a noninteger value.. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. Studies with NAs not considered in outlier analysis.. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. 1 study with NAs omitted from model fitting.. Some yivi values are NA.. noninteger counts in a binomial glm. noninteger counts in a binomial glm. 1 observations dropped due to missing values|
 pooled_groups|stem|86e7011ec19f36bb|3a98a3a5284d9d5c|9bf22d70b08b201c|121320716||t19628.3354642057s|e761ce15bbbe258e|502869|rds|local|vector|||6.582|NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. NAs introduced by coercion. Studies with NAs not considered in outlier analysis.. 1 observations dropped due to missing values. Fisher scoring algorithm may have gotten stuck at a local maximum.Setting tau2  0. Check the profile likelihood plot with profile.|
-poolES|function|aa2abc4d847f6905|||||||||||||||
 raw|object|11573ee32a0a140e|||||||||||||||
 readData|function|82594432466153af|||||||||||||||
 readme|stem|24e78c9ff38d6247|c2c4b6e3bcf05d55|d84d7cdd1c3c4b08|-165896733|README.md*README.qmd|t19628.3445287685s|30aeb2dc627002e3|10579|file|local|vector|||6.839||
