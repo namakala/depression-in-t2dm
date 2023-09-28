@@ -86,11 +86,11 @@ getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, 
   } else if (!is.null(se)) {
     lo <- m - {1.96 * se}
     hi <- m + {1.96 * se}
+  }
 
-    if (hasArg(logit2p)) {
-      lo %<>% meta:::logit2p()
-      hi %<>% meta:::logit2p()
-    }
+  if (hasArg(logit2p)) {
+    lo %<>% meta:::logit2p()
+    hi %<>% meta:::logit2p()
   }
 
   if (multiply) {
@@ -173,13 +173,14 @@ reportMeta <- function(meta_res, type = "meta", ...) {
     meta <- meta_res
   }
 
-  is_prop <- any(class(meta) == "metaprop")
+  is_prop   <- any(class(meta) == "metaprop")
+  transmute <- hasArg(logit2p)
 
   if (type == "meta") {
     ci         <- getCI(meta, lo = "lower", hi = "upper")
-    ci_fixed   <- getCI(meta, lo = "lower.fixed", hi = "upper.fixed")
-    ci_random  <- getCI(meta, lo = "lower.random", hi = "upper.random")
-    ci_predict <- getCI(meta, lo = "lower.predict", hi = "upper.predict")
+    ci_fixed   <- getCI(meta, lo = "lower.fixed", hi = "upper.fixed", ...)
+    ci_random  <- getCI(meta, lo = "lower.random", hi = "upper.random", ...)
+    ci_predict <- getCI(meta, lo = "lower.predict", hi = "upper.predict", ...)
 
     p          <- getPval(meta, p = "pval")
     p_fixed    <- getPval(meta, p = "pval.fixed")
@@ -194,7 +195,7 @@ reportMeta <- function(meta_res, type = "meta", ...) {
     tbl <- with(meta, tibble::tibble(
       "Author"  = studlab,
       "N"       = data$n_total,
-      "%"       = ifelse(is_prop, meta:::logit2p(TE), TE) * 100,
+      "%"       = ifelse(rep(is_prop, nrow(meta$data)), meta:::logit2p(TE), TE) * 100,
       "95% CI"  = ci,
       "Z"       = zval,
       "p"       = p,
@@ -205,10 +206,13 @@ reportMeta <- function(meta_res, type = "meta", ...) {
 
     sub_tbl <- tbl %>% subset(!.$Exclude)
 
+    fixed_es  <- meta$TE.fixed  %>% {ifelse(transmute, meta:::logit2p(.), .) * 100}
+    random_es <- meta$TE.random %>% {ifelse(transmute, meta:::logit2p(.), .) * 100}
+
     res <- with(meta,
       tbl %>%
-        rbind(list("Fixed", sum(sub_tbl$N), TE.fixed * 100, ci_fixed, zval.fixed, p_fixed, NA, NA, FALSE)) %>%
-        rbind(list("Random", sum(sub_tbl$N), TE.random * 100, ci_random, zval.random, p_random, NA, NA, FALSE)) %>%
+        rbind(list("Fixed", sum(sub_tbl$N),  fixed_es,  ci_fixed, zval.fixed, p_fixed, NA, NA, FALSE)) %>%
+        rbind(list("Random", sum(sub_tbl$N), random_es, ci_random, zval.random, p_random, NA, NA, FALSE)) %>%
         rbind(list("Prediction", sum(sub_tbl$N), NA, ci_predict, NA, NA, NA, NA, FALSE))
     )
 
@@ -233,14 +237,14 @@ reportMeta <- function(meta_res, type = "meta", ...) {
       "Fixed"  = reportCI(
         se = seTE.fixed.w,
         m  = TE.fixed.w,
-        logit2p  = TRUE,
-        multiply = TRUE
+        multiply = TRUE,
+        ...
       ),
       "Random" = reportCI(
         se = seTE.random.w,
         m  = TE.random.w,
-        logit2p  = TRUE,
-        multiply = TRUE
+        multiply = TRUE,
+        ...
       ),
       "I2"     = round(I2.w * 100, 2),
       "H"      = round(H.w, 2),

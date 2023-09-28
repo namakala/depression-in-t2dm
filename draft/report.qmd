@@ -143,6 +143,8 @@ tar_read(meta_author) %>% report_meta()
 
 ## Whole Dataset
 
+### No transformation, inverse-variance method
+
 ```{r tbl-bias-all}
 #| tbl-cap: Bias and heterogeneity in all primary studies
 
@@ -173,6 +175,40 @@ sub_meta %>%
   kable_styling(font_size = 7, latex_options = c("repeat_header"))
 
 ```
+
+### Logit link function, GLMM method
+
+```{r tbl-bias-glmm}
+#| tbl-cap: Bias and heterogeneity in all primary studies
+
+tar_read(bias_glmm) %>%
+  subset(select = -c(tau, Rb)) %>%
+  kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
+    "N", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+  )) %>%
+  add_header_above(c(" " = 1, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+```{r tbl-meta-glmm}
+#| tbl-cap: Pooling effect size in all primary studies
+
+sub_meta <- tar_read(meta_glmm) %>%
+  subset(!.$Exclude, select = -c(Exclude))
+
+to_bold  <- sub_meta %>% {which(.$Author %in% c("Random", "Fixed"))}
+to_color <- sub_meta %>% {which(.$Author == "Prediction")}
+
+sub_meta %>%
+  kable(booktabs = TRUE, longtable = TRUE) %>%
+  add_header_above(c(" " = 2, "Prevalence" = 4, "Weight (%)" = 2)) %>%
+  row_spec(to_bold, bold = TRUE) %>%
+  row_spec(to_color, bold = TRUE, background = "#D8DEE9") %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
 
 ## Grouped by year
 
@@ -256,7 +292,7 @@ meta_eda$clean_instrument %>% report_meta()
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
 
-# Sub-group Meta Analysis {#sec-subgroup}
+# Sub-group Meta Analysis, Inverse-Variance Method {#sec-subgroup}
 
 ## Grouped by year of review {#sec-subgroup-year}
 
@@ -348,7 +384,7 @@ report_subgroup(
 
 :::
 
-# Meta-regression {#sec-metareg}
+# Meta-regression, Inverse-Variance Method {#sec-metareg}
 
 ```{r}
 #| fig-cap: Diagnostic plot of the meta-regression model
@@ -376,3 +412,68 @@ tar_read(plt_metareg)
 
 \KOMAoptions{paper=portrait,pagesize}
 \recalctypearea
+
+# Sub-group Meta Analysis, GLMM Method {#sec-subgroup-glmm}
+
+## Grouped by year of review {#sec-subgroup-year}
+
+```{r lst-subgroup-glmm-year}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$year,
+  tar_read(meta_subgroup_glmm)$year
+)
+
+```
+
+## Grouped by published year {#sec-subgroup-glmmcriteria}
+
+```{r lst-subgroup-glmmincl-year}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$incl_year,
+  tar_read(meta_subgroup_glmm)$incl_year
+)
+
+```
+
+## Grouped by criteria {#sec-subgroup-glmmcriteria}
+
+```{r lst-subgroup-glmmcriteria}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$clean_criteria,
+  tar_read(meta_subgroup_glmm)$clean_criteria
+)
+
+```
+
+# Meta-regression, GLMM Method {#sec-subgroup-glmm}
+
+```{r}
+#| fig-cap: Diagnostic plot of the meta-regression model
+#| fig-pos: H
+
+ #tar_read(meta_reg) %T>% plot()
+tar_read(meta_reg_glmm) %>% summary()
+
+```
+
+{{< pagebreak >}}
+
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+```{r fig-metareg-glmm}
+#| fig-cap: Bubble plot on a meta-regression model incorporating year and diagnostic criteria as covariates in determining the prevalence of depression
+#| fig-pos: H
+
+tar_read(plt_metareg_glmm)
+
+```
+
+{{< pagebreak >}}
+
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+
