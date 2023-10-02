@@ -1,0 +1,12 @@
+### Grouped by year of review {#sec-subgroup-year}
+
+{{< include subgroup/invar-year.qmd >}}
+
+### Grouped by published year {#sec-subgroup-criteria}
+
+{{< include subgroup/invar-incl-year.qmd >}}
+
+### Grouped by criteria {#sec-subgroup-criteria}
+
+{{< include subgroup/invar-criteria.qmd >}}
+

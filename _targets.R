@@ -49,5 +49,5 @@ list(
   tar_target(meta_reg_glmm, fitRegression(pooled_glmm, ~ incl_year + clean_criteria)),
   tar_target(plt_metareg_glmm, vizMetareg(meta_reg_glmm)),
   tar_quarto(readme, "README.qmd"),
-  tar_quarto(report, "draft/report.qmd")
+  tar_quarto(report, "draft")
 )

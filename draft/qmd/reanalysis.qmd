@@ -1,0 +1,14 @@
+```{r tbl-bias-author}
+#| tbl-cap: Bias and heterogeneity in included reviews
+
+tar_read(bias_author) %>% report_bias()
+
+```
+
+```{r tbl-meta-author}
+#| tbl-cap: Re-analysis of included reviews
+
+tar_read(meta_author) %>% report_meta()
+
+```
+

@@ -1,0 +1,27 @@
+```{r}
+#| fig-cap: Diagnostic plot of the meta-regression model
+#| fig-pos: H
+
+ #tar_read(meta_reg) %T>% plot()
+tar_read(meta_reg) %>% summary()
+
+```
+
+{{< pagebreak >}}
+
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+```{r fig-metareg}
+#| fig-cap: Bubble plot on a meta-regression model incorporating year and diagnostic criteria as covariates in determining the prevalence of depression
+#| fig-pos: H
+
+tar_read(plt_metareg)
+
+```
+
+{{< pagebreak >}}
+
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+

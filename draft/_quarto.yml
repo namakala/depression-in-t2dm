@@ -1,0 +1,16 @@
+project:
+  type: book
+  output-dir: _render
+  preview:
+    port: 1810
+
+bibliography: ref.bib
+
+book:
+  title: "Report"
+  chapters:
+    - index.qmd
+    - qmd/report.qmd
+
+format:
+  pdf: default

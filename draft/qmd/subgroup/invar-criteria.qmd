@@ -1,0 +1,9 @@
+```{r lst-subgroup-criteria}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_criteria,
+  tar_read(meta_subgroup)$clean_criteria
+)
+
+```
+

@@ -1,0 +1,38 @@
+- Two datasets are used:
+  - Raw data: Includes all extracted studies, still contains duplicates (N = `r nrow(tar_read(tbl))`)
+  - Clean data: Removed duplicates of extracted studies (N = `r nrow(tar_read(tbl_clean))`)
+- Effect size was pooled for the prevalence of diabetes
+- Analysis approach:
+  - Raw data: Reproduce the result reported in included reviews, also to measure bias and heterogeneity
+  - Clean data: Conduct meta-analysis on a subset of clean data, grouped by year, countries, diagnostic criteria, and psychometric instruments
+  - General steps:
+    - Extracted studies which 95% CI expands beyond the pooled confidence interval is regarded as outliers
+    - Outliers were removed when pooling the effect size in favor of improving the homogeneity:
+      - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies without outliers
+      - Exploratory data analysis (EDA) grouped by year contains `r n_eda["year"]` studies without outliers
+      - EDA grouped by country contains `r n_eda["clean_country"]` studies without outliers
+      - EDA grouped by diagnostic criteria contains `r n_eda["clean_criteria"]` studies without outliers
+      - EDA grouped by psychometric instrument contains `r n_eda["clean_instrument"]` studies without outliers
+      - Meta-analysis on whole clean data contains `r sum(tar_read(bias_all)$N)` studies without outliers
+    - Random effect model is fitted for all meta-analysis procedure
+    - Subgroup meta-analysis in case of effect size differences when conducting the EDA procedure
+    - Meta-regression using subgroup variables as covariates
+- **Insight:**
+  - Using whole clean data, I found that the prevalence of depression is `r es_all`
+  - Meanwhile, EDA procedure resulted in the following mean of prevalence:
+    - Grouped by year: `r es_eda["year"]`%
+    - Grouped by country: `r es_eda["clean_country"]`%
+    - Grouped by diagnostic criteria: `r es_eda["clean_criteria"]`%
+    - Grouped by psychometric instrument: `r es_eda["clean_instrument"]`%
+  - Considering the number of outliers and differences between EDA result and whole dataset meta-analysis, it appears that subgroup analysis is necessary
+  - Results from subgroup analysis in @sec-subgroup indicates higher within difference than between difference, implying high variance even within the subgroup
+  - Meta-regression indicates a growing prevalence of depression at the rate of `r round(meta_reg$b[2] * 100, 2)`% per year
+- What to include in the report?
+  - @tbl-bias-author
+  - @tbl-bias-all
+  - @tbl-meta-all
+  - @sec-subgroup-year
+  - @sec-subgroup-criteria
+  - @sec-metareg
+  - @fig-metareg
+

@@ -1,0 +1,9 @@
+```{r lst-subgroup-instrument, eval = FALSE}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_instrument,
+  tar_read(meta_subgroup)$clean_instrument %>% {.[order(.$N, decreasing = TRUE), ]}
+)
+
+```
+

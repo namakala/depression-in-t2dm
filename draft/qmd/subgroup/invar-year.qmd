@@ -1,0 +1,9 @@
+```{r lst-subgroup-year}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$year,
+  tar_read(meta_subgroup)$year
+)
+
+```
+
