@@ -169,6 +169,15 @@ reportMeta <- function(meta_res, type = "meta", ...) {
   if (any(class(meta_res) == "metabias")) {
     bias <- meta_res
     meta <- bias$x
+
+    # Preserve data consistency
+    if (!"exclude" %in% names(bias$x$data)) {
+      bias$x$exclude <-
+        bias$x$data$.exclude <-
+        meta$exclude <-
+          meta$data$.exclude <- FALSE
+    }
+
   } else if (any(class(meta_res) %in% c("metagen", "metaprop"))) {
     meta <- meta_res
   }
@@ -210,15 +219,15 @@ reportMeta <- function(meta_res, type = "meta", ...) {
     random_es <- meta$TE.random %>% {ifelse(transmute, meta:::logit2p(.), .) * 100}
 
     res <- with(meta,
-      tbl %>%
-        rbind(list("Fixed", sum(sub_tbl$N),  fixed_es,  ci_fixed, zval.fixed, p_fixed, NA, NA, FALSE)) %>%
+      sub_tbl %>%
+        rbind(list("Fixed", sum(sub_tbl$N),  fixed_es,  ci_fixed,  zval.fixed,  p_fixed,  NA, NA, FALSE)) %>%
         rbind(list("Random", sum(sub_tbl$N), random_es, ci_random, zval.random, p_random, NA, NA, FALSE)) %>%
-        rbind(list("Prediction", sum(sub_tbl$N), NA, ci_predict, NA, NA, NA, NA, FALSE))
+        rbind(list("Prediction", sum(sub_tbl$N), NA,    ci_predict, NA, NA, NA, NA, FALSE))
     )
 
   } else if (type == "bias") {
     tbl <- with(bias, tibble::tibble(
-      "N"    = sum(!x$exclude),
+      "N"    = sum(!x$data$.exclude),
       "B"    = estimate[["bias"]],
       "SE"   = estimate[["se.bias"]],
       "p"    = getPval(bias),
