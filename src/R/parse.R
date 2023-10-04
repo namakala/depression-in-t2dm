@@ -72,3 +72,17 @@ deduplicate <- function(tbl) {
 
   return(tbl_clean)
 }
+
+rmAnomaly <- function(tbl, year) {
+  #' Remove Anomalous Entry
+  #'
+  #' Remove anomaly based on five-year rolling window and IQR. This function
+  #' will first create a time-based rolling window, then calculate the upper
+  #' and lower 25 percentile. Values outside this range is regarded as an
+  #' outlier.
+  #'
+  #' @param tbl A data frame object containing extracted studies
+  #' @param year Column name from `tbl` signifying the published year
+  #' @return A data frame object with an added column: `anomaly`
+  years <- tbl[[year]] |> unique() |> sort(decreasing = FALSE)
+}

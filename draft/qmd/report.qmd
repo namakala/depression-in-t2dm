@@ -5,7 +5,6 @@ format:
   pdf:
     keep-tex: true
     number-sections: true
-bibliography: ref.bib
 knitr:
   opts_chunk:
     echo: false
