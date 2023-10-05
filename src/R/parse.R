@@ -37,13 +37,23 @@ cleanData <- function(tbl) {
     )}) %>%
     inset2("clean_country", value = {
       .$country %>%
-        ifelse(grepl(x = ., "(^US|Carolin|Califor|Maryland|Chicago)", ignore.case = TRUE), "USA", .) %>%
+        ifelse(grepl(x = ., "(^US|Carolin|Califor|Maryland|Chicago|Texa)", ignore.case = TRUE), "United States of America", .) %>%
         ifelse(is.na(.) | grepl(x = ., "-|report|multic|unavail", ignore.case = TRUE), "Global", .) %>%
         ifelse(grepl(x = ., "Netherlands", ignore.case = TRUE), "Netherlands", .) %>%
-        ifelse(grepl(x = ., "UK|England"), "UK", .) %>%
+        ifelse(grepl(x = ., "UK|England|Scotla"), "United Kingdom", .) %>%
         ifelse(grepl(x = ., "China"), "China", .) %>%
+        ifelse(grepl(x = ., "India"), "India", .) %>%
         ifelse(grepl(x = ., "Saudi"), "Saudi Arabia", .) %>%
-        ifelse(grepl(x = ., "Korea"), "South Korea", .) %>%
+        ifelse(grepl(x = ., "Russia"), "Russian Federation", .) %>%
+        ifelse(grepl(x = ., "Iran"), "Iran (Islamic Republic of)", .) %>%
+        ifelse(grepl(x = ., "Korea"), "Republic of Korea", .) %>%
+        ifelse(grepl(x = ., "Gaza"), "Palestine", .) %>%
+        ifelse(grepl(x = ., "Taiwan"), "Taiwan (Province of China)", .) %>%
+        ifelse(grepl(x = ., "Austral"), "Australia", .) %>%
+        ifelse(grepl(x = ., "Kosovo"), "Serbia", .) %>%
+        ifelse(grepl(x = ., "Pakista"), "Pakistan", .) %>%
+        ifelse(grepl(x = ., "Viet"), "Viet Nam", .) %>%
+        ifelse(grepl(x = ., "UAE"), "United Arab Emirates", .) %>%
         ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)
     }) %>%
     inset2("clean_instrument", value = {
@@ -125,4 +135,25 @@ isAnomaly <- function(tbl, colyear, numyear = 5, varname = "prev_diabet") {
   })
 
   return(res)
+}
+
+readGBD <- function(path, ctry_list, ...) {
+  #' Read GBD data
+  #'
+  #' Read GBD data from a specified path
+  #'
+  #' @param path Relative path of the file
+  #' @param ctry_list A vector of country names
+  #' @inheritDotParams readr::read_csv()
+  #' @return A tibble data frame
+  tbl <- readr::read_csv(path, ...) %>%
+    subset(
+      {.$location_name %in% unique(ctry_list)} &
+        .$sex_name    == "Both" &
+        .$age_name    == "All ages" &
+        .$metric_name == "Percent",
+      select = c("year", "location_name", "cause_name", "val", "upper", "lower")
+    )
+
+  return(tbl)
 }
