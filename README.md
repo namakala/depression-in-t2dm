@@ -55,6 +55,8 @@ using “C” 4: Setting LC_MONETARY failed, using “C”
 graph LR
   subgraph legend
     direction LR
+    x0a52b03877696646([""Outdated""]):::outdated --- x5b3426b4c7fa7dbc([""Started""]):::started
+    x5b3426b4c7fa7dbc([""Started""]):::started --- x7420bd9270f8d27d([""Up to date""]):::uptodate
     x7420bd9270f8d27d([""Up to date""]):::uptodate --- xbf4603d6c2c2ad6b([""Stem""]):::none
     xbf4603d6c2c2ad6b([""Stem""]):::none --- xf0bce276fe2b9d3e>""Function""]:::none
     xf0bce276fe2b9d3e>""Function""]:::none --- x5bffbffeae195fc9{{""Object""}}:::none
@@ -74,78 +76,85 @@ graph LR
     x8a64dc026076b147>"calcTE"]:::uptodate --> x19d56b95df0a7e85>"poolES"]:::uptodate
     xb7940ee18a25ecab>"isAnomaly"]:::uptodate --> x4cfdc4b8ffc0833b>"deduplicate"]:::uptodate
     x97296012062236b1>"getPval"]:::uptodate --> x275ceffe01854d89>"reportMeta"]:::uptodate
-    x19d56b95df0a7e85>"poolES"]:::uptodate --> x16f58f5592cc23f2(["pooled_trim"]):::uptodate
-    x64501e899d71430b(["tbl_trim"]):::uptodate --> x16f58f5592cc23f2(["pooled_trim"]):::uptodate
-    x6c2a68b24919816c(["pooled_trim_glmm"]):::uptodate --> x157d9cc65920f0ee(["bias_trim_glmm"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x157d9cc65920f0ee(["bias_trim_glmm"]):::uptodate
-    x2f8e058a4c200eca(["pooled_glmm"]):::uptodate --> x7435453e09723b05(["bias_glmm"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x7435453e09723b05(["bias_glmm"]):::uptodate
-    x19d56b95df0a7e85>"poolES"]:::uptodate --> x6c2a68b24919816c(["pooled_trim_glmm"]):::uptodate
-    x64501e899d71430b(["tbl_trim"]):::uptodate --> x6c2a68b24919816c(["pooled_trim_glmm"]):::uptodate
-    xee61ab83b7d675c1>"iterate"]:::uptodate --> x5622303d0fb3e0ca(["pooled_groups"]):::uptodate
-    xe37aeeab4f19d257{{"itergroup"}}:::uptodate --> x5622303d0fb3e0ca(["pooled_groups"]):::uptodate
-    x07c0a25d8d1269ae(["tbl_clean"]):::uptodate --> x5622303d0fb3e0ca(["pooled_groups"]):::uptodate
-    x543688e28a1fc6f2>"fitSubgroup"]:::uptodate --> x97078af44030bc70(["subgroup_analysis"]):::uptodate
-    xe37aeeab4f19d257{{"itergroup"}}:::uptodate --> x97078af44030bc70(["subgroup_analysis"]):::uptodate
-    x0c55547544d10beb(["pooled_all"]):::uptodate --> x97078af44030bc70(["subgroup_analysis"]):::uptodate
-    x2f8e058a4c200eca(["pooled_glmm"]):::uptodate --> x372094126e882570(["meta_glmm"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x372094126e882570(["meta_glmm"]):::uptodate
-    x67be920e14d52a62{{"raw"}}:::uptodate --> x948809345d27ea2b(["file_extract"]):::uptodate
-    xe507bce80d611fab>"mkReport"]:::uptodate --> x2e9a38145b3ac661(["meta_author"]):::uptodate
-    x631988a8d3d85fb3(["pooled_author"]):::uptodate --> x2e9a38145b3ac661(["meta_author"]):::uptodate
-    x0c55547544d10beb(["pooled_all"]):::uptodate --> x430992bea01a7746(["meta_all"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x430992bea01a7746(["meta_all"]):::uptodate
-    x0c55547544d10beb(["pooled_all"]):::uptodate --> x1da53b9024b2e84a(["bias_all"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x1da53b9024b2e84a(["bias_all"]):::uptodate
-    x6cab7297675953ab>"fitRegression"]:::uptodate --> x43a0cd95af269145(["meta_reg_glmm"]):::uptodate
-    x2f8e058a4c200eca(["pooled_glmm"]):::uptodate --> x43a0cd95af269145(["meta_reg_glmm"]):::uptodate
-    xee61ab83b7d675c1>"iterate"]:::uptodate --> x631988a8d3d85fb3(["pooled_author"]):::uptodate
-    xe797a538520c914d(["tbl"]):::uptodate --> x631988a8d3d85fb3(["pooled_author"]):::uptodate
-    x6c2a68b24919816c(["pooled_trim_glmm"]):::uptodate --> x979bec9dba5c139a(["meta_trim_glmm"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x979bec9dba5c139a(["meta_trim_glmm"]):::uptodate
-    x16f58f5592cc23f2(["pooled_trim"]):::uptodate --> x7d90d8c3f9be815f(["bias_trim"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x7d90d8c3f9be815f(["bias_trim"]):::uptodate
-    x948809345d27ea2b(["file_extract"]):::uptodate --> xe797a538520c914d(["tbl"]):::uptodate
-    xb4a3d4a2fc7bb7d2>"readData"]:::uptodate --> xe797a538520c914d(["tbl"]):::uptodate
-    x19d56b95df0a7e85>"poolES"]:::uptodate --> x2f8e058a4c200eca(["pooled_glmm"]):::uptodate
-    x07c0a25d8d1269ae(["tbl_clean"]):::uptodate --> x2f8e058a4c200eca(["pooled_glmm"]):::uptodate
-    xe507bce80d611fab>"mkReport"]:::uptodate --> x9779f797366ec5b8(["meta_eda"]):::uptodate
-    x5622303d0fb3e0ca(["pooled_groups"]):::uptodate --> x9779f797366ec5b8(["meta_eda"]):::uptodate
-    x43a0cd95af269145(["meta_reg_glmm"]):::uptodate --> xacc055f19d077ef7(["plt_metareg_glmm"]):::uptodate
-    xb8df53a3923736a6>"vizMetareg"]:::uptodate --> xacc055f19d077ef7(["plt_metareg_glmm"]):::uptodate
-    x3b47b6779afe85cb(["meta_reg"]):::uptodate --> x85d32e8dea63783a(["plt_metareg"]):::uptodate
-    xb8df53a3923736a6>"vizMetareg"]:::uptodate --> x85d32e8dea63783a(["plt_metareg"]):::uptodate
-    x19d56b95df0a7e85>"poolES"]:::uptodate --> x0c55547544d10beb(["pooled_all"]):::uptodate
-    x07c0a25d8d1269ae(["tbl_clean"]):::uptodate --> x0c55547544d10beb(["pooled_all"]):::uptodate
-    x16f58f5592cc23f2(["pooled_trim"]):::uptodate --> xf4b58dbf4ed40c45(["meta_trim"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> xf4b58dbf4ed40c45(["meta_trim"]):::uptodate
-    x4cfdc4b8ffc0833b>"deduplicate"]:::uptodate --> x07c0a25d8d1269ae(["tbl_clean"]):::uptodate
-    xe797a538520c914d(["tbl"]):::uptodate --> x07c0a25d8d1269ae(["tbl_clean"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> x8f6d13cb7c3e85ba(["meta_subgroup_glmm"]):::uptodate
-    x20d407903515e4c8(["subgroup_glmm"]):::uptodate --> x8f6d13cb7c3e85ba(["meta_subgroup_glmm"]):::uptodate
-    x6cab7297675953ab>"fitRegression"]:::uptodate --> x3b47b6779afe85cb(["meta_reg"]):::uptodate
-    x0c55547544d10beb(["pooled_all"]):::uptodate --> x3b47b6779afe85cb(["meta_reg"]):::uptodate
-    xe507bce80d611fab>"mkReport"]:::uptodate --> x7cddcc2458aa2f2a(["bias_eda"]):::uptodate
-    x5622303d0fb3e0ca(["pooled_groups"]):::uptodate --> x7cddcc2458aa2f2a(["bias_eda"]):::uptodate
-    x275ceffe01854d89>"reportMeta"]:::uptodate --> xaf0034ed7fb04a01(["meta_subgroup"]):::uptodate
-    x97078af44030bc70(["subgroup_analysis"]):::uptodate --> xaf0034ed7fb04a01(["meta_subgroup"]):::uptodate
-    x07c0a25d8d1269ae(["tbl_clean"]):::uptodate --> x64501e899d71430b(["tbl_trim"]):::uptodate
-    xe507bce80d611fab>"mkReport"]:::uptodate --> x8258980e0682878d(["bias_author"]):::uptodate
-    x631988a8d3d85fb3(["pooled_author"]):::uptodate --> x8258980e0682878d(["bias_author"]):::uptodate
-    x7cddcc2458aa2f2a(["bias_eda"]):::uptodate --> xe0fba61fbc506510(["report"]):::uptodate
-    x430992bea01a7746(["meta_all"]):::uptodate --> xe0fba61fbc506510(["report"]):::uptodate
-    x2e9a38145b3ac661(["meta_author"]):::uptodate --> xe0fba61fbc506510(["report"]):::uptodate
-    x9779f797366ec5b8(["meta_eda"]):::uptodate --> xe0fba61fbc506510(["report"]):::uptodate
-    x3b47b6779afe85cb(["meta_reg"]):::uptodate --> xe0fba61fbc506510(["report"]):::uptodate
-    x543688e28a1fc6f2>"fitSubgroup"]:::uptodate --> x20d407903515e4c8(["subgroup_glmm"]):::uptodate
-    xe37aeeab4f19d257{{"itergroup"}}:::uptodate --> x20d407903515e4c8(["subgroup_glmm"]):::uptodate
-    x2f8e058a4c200eca(["pooled_glmm"]):::uptodate --> x20d407903515e4c8(["subgroup_glmm"]):::uptodate
-    x6e52cb0f1668cc22(["readme"]):::uptodate --> x6e52cb0f1668cc22(["readme"]):::uptodate
+    x16f58f5592cc23f2(["pooled_trim"]):::outdated --> x7d90d8c3f9be815f(["bias_trim"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x7d90d8c3f9be815f(["bias_trim"]):::outdated
+    x07c0a25d8d1269ae(["tbl_clean"]):::outdated --> x64501e899d71430b(["tbl_trim"]):::outdated
+    x543688e28a1fc6f2>"fitSubgroup"]:::uptodate --> x20d407903515e4c8(["subgroup_glmm"]):::outdated
+    xe37aeeab4f19d257{{"itergroup"}}:::uptodate --> x20d407903515e4c8(["subgroup_glmm"]):::outdated
+    x2f8e058a4c200eca(["pooled_glmm"]):::outdated --> x20d407903515e4c8(["subgroup_glmm"]):::outdated
+    x2f8e058a4c200eca(["pooled_glmm"]):::outdated --> x7435453e09723b05(["bias_glmm"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x7435453e09723b05(["bias_glmm"]):::outdated
+    xee61ab83b7d675c1>"iterate"]:::uptodate --> x5622303d0fb3e0ca(["pooled_groups"]):::outdated
+    xe37aeeab4f19d257{{"itergroup"}}:::uptodate --> x5622303d0fb3e0ca(["pooled_groups"]):::outdated
+    x07c0a25d8d1269ae(["tbl_clean"]):::outdated --> x5622303d0fb3e0ca(["pooled_groups"]):::outdated
+    x19d56b95df0a7e85>"poolES"]:::uptodate --> x6c2a68b24919816c(["pooled_trim_glmm"]):::outdated
+    x64501e899d71430b(["tbl_trim"]):::outdated --> x6c2a68b24919816c(["pooled_trim_glmm"]):::outdated
+    x67be920e14d52a62{{"raw"}}:::uptodate --> xdd4b0b70c7769dbd(["file_gbd"]):::outdated
+    x6c2a68b24919816c(["pooled_trim_glmm"]):::outdated --> x157d9cc65920f0ee(["bias_trim_glmm"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x157d9cc65920f0ee(["bias_trim_glmm"]):::outdated
+    x948809345d27ea2b(["file_extract"]):::outdated --> xe797a538520c914d(["tbl"]):::outdated
+    xb4a3d4a2fc7bb7d2>"readData"]:::uptodate --> xe797a538520c914d(["tbl"]):::outdated
+    xe507bce80d611fab>"mkReport"]:::uptodate --> x8258980e0682878d(["bias_author"]):::outdated
+    x631988a8d3d85fb3(["pooled_author"]):::outdated --> x8258980e0682878d(["bias_author"]):::outdated
+    x0c55547544d10beb(["pooled_all"]):::outdated --> x1da53b9024b2e84a(["bias_all"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x1da53b9024b2e84a(["bias_all"]):::outdated
+    x19d56b95df0a7e85>"poolES"]:::uptodate --> x2f8e058a4c200eca(["pooled_glmm"]):::outdated
+    x07c0a25d8d1269ae(["tbl_clean"]):::outdated --> x2f8e058a4c200eca(["pooled_glmm"]):::outdated
+    x6cab7297675953ab>"fitRegression"]:::uptodate --> x3b47b6779afe85cb(["meta_reg"]):::outdated
+    x0c55547544d10beb(["pooled_all"]):::outdated --> x3b47b6779afe85cb(["meta_reg"]):::outdated
+    x0c55547544d10beb(["pooled_all"]):::outdated --> x430992bea01a7746(["meta_all"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x430992bea01a7746(["meta_all"]):::outdated
+    xe507bce80d611fab>"mkReport"]:::uptodate --> x7cddcc2458aa2f2a(["bias_eda"]):::outdated
+    x5622303d0fb3e0ca(["pooled_groups"]):::outdated --> x7cddcc2458aa2f2a(["bias_eda"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x8f6d13cb7c3e85ba(["meta_subgroup_glmm"]):::outdated
+    x20d407903515e4c8(["subgroup_glmm"]):::outdated --> x8f6d13cb7c3e85ba(["meta_subgroup_glmm"]):::outdated
+    x7cddcc2458aa2f2a(["bias_eda"]):::outdated --> xe0fba61fbc506510(["report"]):::outdated
+    x430992bea01a7746(["meta_all"]):::outdated --> xe0fba61fbc506510(["report"]):::outdated
+    x2e9a38145b3ac661(["meta_author"]):::outdated --> xe0fba61fbc506510(["report"]):::outdated
+    x9779f797366ec5b8(["meta_eda"]):::outdated --> xe0fba61fbc506510(["report"]):::outdated
+    x3b47b6779afe85cb(["meta_reg"]):::outdated --> xe0fba61fbc506510(["report"]):::outdated
+    x6c2a68b24919816c(["pooled_trim_glmm"]):::outdated --> x979bec9dba5c139a(["meta_trim_glmm"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x979bec9dba5c139a(["meta_trim_glmm"]):::outdated
+    x543688e28a1fc6f2>"fitSubgroup"]:::uptodate --> x97078af44030bc70(["subgroup_analysis"]):::outdated
+    xe37aeeab4f19d257{{"itergroup"}}:::uptodate --> x97078af44030bc70(["subgroup_analysis"]):::outdated
+    x0c55547544d10beb(["pooled_all"]):::outdated --> x97078af44030bc70(["subgroup_analysis"]):::outdated
+    x19d56b95df0a7e85>"poolES"]:::uptodate --> x16f58f5592cc23f2(["pooled_trim"]):::outdated
+    x64501e899d71430b(["tbl_trim"]):::outdated --> x16f58f5592cc23f2(["pooled_trim"]):::outdated
+    xdd4b0b70c7769dbd(["file_gbd"]):::outdated --> x0d85e8aa1f7733e8(["tbl_gbd"]):::outdated
+    x0c6b15df3123c413>"readGBD"]:::uptodate --> x0d85e8aa1f7733e8(["tbl_gbd"]):::outdated
+    x43a0cd95af269145(["meta_reg_glmm"]):::outdated --> xacc055f19d077ef7(["plt_metareg_glmm"]):::outdated
+    xb8df53a3923736a6>"vizMetareg"]:::uptodate --> xacc055f19d077ef7(["plt_metareg_glmm"]):::outdated
+    x67be920e14d52a62{{"raw"}}:::uptodate --> x948809345d27ea2b(["file_extract"]):::outdated
+    x16f58f5592cc23f2(["pooled_trim"]):::outdated --> xf4b58dbf4ed40c45(["meta_trim"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> xf4b58dbf4ed40c45(["meta_trim"]):::outdated
+    xee61ab83b7d675c1>"iterate"]:::uptodate --> x631988a8d3d85fb3(["pooled_author"]):::outdated
+    xe797a538520c914d(["tbl"]):::outdated --> x631988a8d3d85fb3(["pooled_author"]):::outdated
+    x19d56b95df0a7e85>"poolES"]:::uptodate --> x0c55547544d10beb(["pooled_all"]):::outdated
+    x07c0a25d8d1269ae(["tbl_clean"]):::outdated --> x0c55547544d10beb(["pooled_all"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> xaf0034ed7fb04a01(["meta_subgroup"]):::outdated
+    x97078af44030bc70(["subgroup_analysis"]):::outdated --> xaf0034ed7fb04a01(["meta_subgroup"]):::outdated
+    x3b47b6779afe85cb(["meta_reg"]):::outdated --> x85d32e8dea63783a(["plt_metareg"]):::outdated
+    xb8df53a3923736a6>"vizMetareg"]:::uptodate --> x85d32e8dea63783a(["plt_metareg"]):::outdated
+    x2f8e058a4c200eca(["pooled_glmm"]):::outdated --> x372094126e882570(["meta_glmm"]):::outdated
+    x275ceffe01854d89>"reportMeta"]:::uptodate --> x372094126e882570(["meta_glmm"]):::outdated
+    x4cfdc4b8ffc0833b>"deduplicate"]:::uptodate --> x07c0a25d8d1269ae(["tbl_clean"]):::outdated
+    xe797a538520c914d(["tbl"]):::outdated --> x07c0a25d8d1269ae(["tbl_clean"]):::outdated
+    x6cab7297675953ab>"fitRegression"]:::uptodate --> x43a0cd95af269145(["meta_reg_glmm"]):::outdated
+    x2f8e058a4c200eca(["pooled_glmm"]):::outdated --> x43a0cd95af269145(["meta_reg_glmm"]):::outdated
+    xe507bce80d611fab>"mkReport"]:::uptodate --> x9779f797366ec5b8(["meta_eda"]):::outdated
+    x5622303d0fb3e0ca(["pooled_groups"]):::outdated --> x9779f797366ec5b8(["meta_eda"]):::outdated
+    xe507bce80d611fab>"mkReport"]:::uptodate --> x2e9a38145b3ac661(["meta_author"]):::outdated
+    x631988a8d3d85fb3(["pooled_author"]):::outdated --> x2e9a38145b3ac661(["meta_author"]):::outdated
+    x6e52cb0f1668cc22(["readme"]):::started --> x6e52cb0f1668cc22(["readme"]):::started
   end
+  classDef outdated stroke:#000000,color:#000000,fill:#78B7C5;
+  classDef started stroke:#000000,color:#000000,fill:#DC863B;
   classDef uptodate stroke:#000000,color:#ffffff,fill:#354823;
   classDef none stroke:#000000,color:#000000,fill:#94a4ac;
   linkStyle 0 stroke-width:0px;
   linkStyle 1 stroke-width:0px;
   linkStyle 2 stroke-width:0px;
-  linkStyle 82 stroke-width:0px;
+  linkStyle 3 stroke-width:0px;
+  linkStyle 4 stroke-width:0px;
+  linkStyle 87 stroke-width:0px;
 ```
