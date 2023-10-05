@@ -37,30 +37,30 @@ cleanData <- function(tbl) {
     )}) %>%
     inset2("clean_country", value = {
       .$country %>%
-        ifelse(grepl(x = ., "(^US|Carolin|Califor|Maryland|Chicago|Texa)", ignore.case = TRUE), "United States of America", .) %>%
-        ifelse(is.na(.) | grepl(x = ., "-|report|multic|unavail", ignore.case = TRUE), "Global", .) %>%
-        ifelse(grepl(x = ., "Netherlands", ignore.case = TRUE), "Netherlands", .) %>%
-        ifelse(grepl(x = ., "UK|England|Scotla"), "United Kingdom", .) %>%
-        ifelse(grepl(x = ., "China"), "China", .) %>%
-        ifelse(grepl(x = ., "India"), "India", .) %>%
-        ifelse(grepl(x = ., "Saudi"), "Saudi Arabia", .) %>%
-        ifelse(grepl(x = ., "Russia"), "Russian Federation", .) %>%
-        ifelse(grepl(x = ., "Iran"), "Iran (Islamic Republic of)", .) %>%
-        ifelse(grepl(x = ., "Korea"), "Republic of Korea", .) %>%
-        ifelse(grepl(x = ., "Gaza"), "Palestine", .) %>%
-        ifelse(grepl(x = ., "Taiwan"), "Taiwan (Province of China)", .) %>%
-        ifelse(grepl(x = ., "Austral"), "Australia", .) %>%
-        ifelse(grepl(x = ., "Kosovo"), "Serbia", .) %>%
-        ifelse(grepl(x = ., "Pakista"), "Pakistan", .) %>%
-        ifelse(grepl(x = ., "Viet"), "Viet Nam", .) %>%
-        ifelse(grepl(x = ., "UAE"), "United Arab Emirates", .) %>%
-        ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)
+        {ifelse(grepl(x = ., "(^US|Carolin|Califor|Maryland|Chicago|Texa)", ignore.case = TRUE), "United States of America", .)} %>%
+        {ifelse(is.na(.) | grepl(x = ., "-|report|multic|unavail", ignore.case = TRUE), "Global", .)} %>%
+        {ifelse(grepl(x = ., "Netherlands", ignore.case = TRUE), "Netherlands", .)} %>%
+        {ifelse(grepl(x = ., "UK|England|Scotla"), "United Kingdom", .)} %>%
+        {ifelse(grepl(x = ., "China"), "China", .)} %>%
+        {ifelse(grepl(x = ., "India"), "India", .)} %>%
+        {ifelse(grepl(x = ., "Saudi"), "Saudi Arabia", .)} %>%
+        {ifelse(grepl(x = ., "Russia"), "Russian Federation", .)} %>%
+        {ifelse(grepl(x = ., "Iran"), "Iran (Islamic Republic of)", .)} %>%
+        {ifelse(grepl(x = ., "Korea"), "Republic of Korea", .)} %>%
+        {ifelse(grepl(x = ., "Gaza"), "Palestine", .)} %>%
+        {ifelse(grepl(x = ., "Taiwan"), "Taiwan (Province of China)", .)} %>%
+        {ifelse(grepl(x = ., "Austral"), "Australia", .)} %>%
+        {ifelse(grepl(x = ., "Kosovo"), "Serbia", .)} %>%
+        {ifelse(grepl(x = ., "Pakista"), "Pakistan", .)} %>%
+        {ifelse(grepl(x = ., "Viet"), "Viet Nam", .)} %>%
+        {ifelse(grepl(x = ., "UAE"), "United Arab Emirates", .)} %>%
+        {ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)}
     }) %>%
     inset2("clean_instrument", value = {
       gsub(x = .$instrument, "\\s+([<>].*|&.*|\\n)", "") %>%
-        ifelse(grepl(x = ., "Zung|ZSDS", ignore.case = TRUE), "ZRDS", .) %>%
-        ifelse(grepl(x = ., "MR|History|Record|Note|diag|prescrip|schedule", ignore.case = TRUE), "Medical Records", .) %>%
-        ifelse(is.na(.) | grepl(x = ., "not|specified|N/A", ignore.case = TRUE), "Not Reported", .)
+        {ifelse(grepl(x = ., "PHQ", ignore.case = TRUE), "PHQ", .)} %>%
+        {ifelse(grepl(x = ., "BDI", ignore.case = TRUE), "BDI", .)} %>%
+        {ifelse(grepl(x = ., "PHQ|BDI"), ., "Others")}
     })
 
   return(tbl_clean)
