@@ -146,14 +146,57 @@ readGBD <- function(path, ctry_list, ...) {
   #' @param ctry_list A vector of country names
   #' @inheritDotParams readr::read_csv()
   #' @return A tibble data frame
+
+  # Parse and subset the data frame
   tbl <- readr::read_csv(path, ...) %>%
+    inset2("se", value = {.$upper - .$val} / 1.96)
+
+  sub_tbl <- tbl %>%
     subset(
       {.$location_name %in% unique(ctry_list)} &
         .$sex_name    == "Both" &
         .$age_name    == "All ages" &
         .$metric_name == "Percent",
-      select = c("year", "location_name", "cause_name", "val", "upper", "lower")
+      select = c("year", "location_name", "cause_name", "val", "se")
     )
 
-  return(tbl)
+  # Clean the cause name (diagnosis) variable
+  tbl_clean <- sub_tbl %>% inset2("cause_name", value = {
+    .$cause_name %>% {dplyr::case_when(
+      . == "Diabetes mellitus type 1"  ~ "gbd_t1dm",
+      . == "Diabetes mellitus type 2"  ~ "gbd_t2dm",
+      . == "Diabetes mellitus"         ~ "gbd_dm",
+      . == "Major depressive disorder" ~ "gbd_mdd",
+      .default = "gbd_other"
+    )}
+  })
+  
+  # Reshape into a wide table
+  tbl_wide <- tbl_clean %>%
+    tidyr::pivot_wider(names_from = "cause_name", values_from = c("val", "se"))
+
+  return(tbl_wide)
+}
+
+mergeGBD <- function(tbl, tbl_gbd, ...) {
+  #' Merge GBD
+  #'
+  #' Merge extracted information with GBD data
+  #'
+  #' @param tbl A data frame of extracted information from primary studies
+  #' @param tbl_gbd A data frame of GBD data
+  #' @inheritDotParams base::merge
+  #' @return A merged data frame
+  tbl_merge <- merge(
+    tbl, tbl_gbd,
+    by.x = c("incl_year", "clean_country"),
+    by.y = c("year", "location_name"),
+    ...
+  ) %>%
+    tibble::tibble()
+
+  tbl_rr <- tbl_merge %>%
+    inset("rr_mdd", value = as.numeric(.$prev_diabet) / .$val_gbd_mdd)
+
+  return(tbl_rr)
 }

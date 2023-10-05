@@ -26,13 +26,14 @@ itergroup <- c(
 # Initiate analysis pipeline
 list(
 
-  # Read the data frame
+  # Read the data frames
   tar_target(file_extract, raw["extracted"], format = "file"),
   tar_target(file_gbd, raw["prevmdddm"], format = "file"),
   tar_target(tbl, readData(file_extract)),
   tar_target(tbl_clean, deduplicate(tbl)),
   tar_target(tbl_trim, tbl_clean %>% subset(!.$anomaly)),
   tar_target(tbl_gbd, readGBD(file_gbd, ctry_list = tbl_clean$clean_country)),
+  tar_target(tbl_merge, mergeGBD(tbl_clean, tbl_gbd)),
 
   # Reproduce meta-analysis from previous reviews
   tar_target(pooled_author, iterate(tbl, "author_year", sm = "PRAW", rm_outlier = FALSE)),
