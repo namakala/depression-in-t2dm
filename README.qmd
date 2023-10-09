@@ -31,9 +31,10 @@ This step will install `renv` package, which will help you set up the `R` enviro
 
 ```
 renv::restore()
+renv::settings$snapshot.type("all")
 ```
 
-This step will read `renv.lock` file and install required packages to your local machine. When all packages loaded properly (make sure there's no error at all), you *have to* restart your R session. Then, you should be able to proceed with:
+This step will read `renv.lock` file and install required packages to your local machine. When all packages loaded properly (make sure there's no error at all), you *have to* restart your R session. Setting the snapshot to `all` will allow `renv` to track all the required packages, including its dependencies. After restarting your R session, you should be able to proceed with:
 
 ```
 targets::tar_make()

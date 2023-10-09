@@ -26,10 +26,13 @@ This step will install `renv` package, which will help you set up the
 updating packages I used throughout the analysis.
 
     renv::restore()
+    renv::settings$snapshot.type("all")
 
 This step will read `renv.lock` file and install required packages to
 your local machine. When all packages loaded properly (make sure there’s
-no error at all), you *have to* restart your R session. Then, you should
+no error at all), you *have to* restart your R session. Setting the
+snapshot to `all` will allow `renv` to track all the required packages,
+including its dependencies. After restarting your R session, you should
 be able to proceed with:
 
     targets::tar_make()
@@ -51,7 +54,9 @@ using “C” 4: Setting LC_MONETARY failed, using “C”
 
 ``` mermaid
 graph LR
-  subgraph legend
+  style Legend fill:#FFFFFF00,stroke:#000000;
+  style Graph fill:#FFFFFF00,stroke:#000000;
+  subgraph Legend
     direction LR
     x0a52b03877696646([""Outdated""]):::outdated --- x7420bd9270f8d27d([""Up to date""]):::uptodate
     x7420bd9270f8d27d([""Up to date""]):::uptodate --- x5b3426b4c7fa7dbc([""Started""]):::started
