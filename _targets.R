@@ -24,11 +24,6 @@ itergroup <- c(
 ) %>%
   set_names(., .)
 
-# Configure target options
-tar_option_set(
-  packages = c("magrittr", "tidyr", "dplyr")
-)
-
 # Initiate analysis pipeline
 list(
 
