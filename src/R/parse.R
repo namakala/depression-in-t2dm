@@ -57,10 +57,11 @@ cleanData <- function(tbl) {
         {ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)}
     }) %>%
     inset2("clean_instrument", value = {
-      gsub(x = .$instrument, "\\s+([<>].*|&.*|\\n)", "") %>%
+      {ifelse(grepl(x = .$clean_criteria, "Clin.*Diag"), .$clean_criteria, .$instrument)} %>%
+        {gsub(x = ., "\\s+([<>].*|&.*|\\n)", "")} %>%
         {ifelse(grepl(x = ., "PHQ", ignore.case = TRUE), "PHQ", .)} %>%
         {ifelse(grepl(x = ., "BDI", ignore.case = TRUE), "BDI", .)} %>%
-        {ifelse(grepl(x = ., "PHQ|BDI"), ., "Others")}
+        {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag"), ., "Others")}
     })
 
   return(tbl_clean)

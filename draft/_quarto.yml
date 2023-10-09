@@ -11,6 +11,23 @@ book:
   chapters:
     - index.qmd
     - qmd/report.qmd
+    - qmd/subgroup.qmd
+    - qmd/metareg.qmd
 
 format:
-  pdf: default
+  pdf:
+    keep-tex: true
+    number-sections: true
+
+knitr:
+  opts_chunk:
+    echo: false
+    error: false
+    warning: false
+    message: false
+    fig.width: 10
+    fig.height: 8
+    comment: "|"
+
+header-includes:
+- \usepackage{typearea}

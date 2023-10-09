@@ -1,0 +1,66 @@
+### Grouped by year of review {#sec-subgroup-year}
+
+```{r lst-subgroup-year}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$year,
+  tar_read(meta_subgroup)$year
+)
+
+```
+
+### Grouped by published year {#sec-subgroup-incl-year}
+
+```{r lst-subgroup-incl-year}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$incl_year,
+  tar_read(meta_subgroup)$incl_year
+)
+
+```
+
+### Grouped by continent {#sec-subgroup-continent}
+
+```{r lst-subgroup-continent, eval = TRUE}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$continent,
+  tar_read(meta_subgroup)$continent %>% {.[order(.$N, decreasing = TRUE), ]}
+)
+
+```
+
+### Grouped by region {#sec-subgroup-region}
+
+```{r lst-subgroup-region, eval = TRUE}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$region,
+  tar_read(meta_subgroup)$region %>% {.[order(.$N, decreasing = TRUE), ]}
+)
+
+```
+
+### Grouped by criteria {#sec-subgroup-criteria}
+
+```{r lst-subgroup-criteria}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_criteria,
+  tar_read(meta_subgroup)$clean_criteria
+)
+
+```
+
+### Grouped by instrument {#sec-subgroup-instrument}
+
+```{r lst-subgroup-instrument, eval = TRUE}
+
+report_subgroup(
+  tar_read(subgroup_analysis)$clean_instrument,
+  tar_read(meta_subgroup)$clean_instrument %>% {.[order(.$N, decreasing = TRUE), ]}
+)
+
+```
+

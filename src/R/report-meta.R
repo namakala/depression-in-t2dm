@@ -25,7 +25,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   if (is_glmm) {
 
     subtitle <- sprintf(
-      "Meta-Regression on %s primary studies from %s to %s, where only %s studies relies on clinical diagnosis",
+      "Meta-Regression on %s primary studies from %s to %s, where only %s studies rely on clinical diagnosis",
       sum(!is.na(tbl$.event)),
       min(tbl$incl_year),
       max(tbl$incl_year),

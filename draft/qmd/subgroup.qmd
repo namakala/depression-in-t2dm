@@ -1,0 +1,53 @@
+```{r init}
+
+pkgs <- c("magrittr", "targets", "kableExtra")
+pkgs_load <- sapply(pkgs, library, character.only = TRUE)
+
+options(digits = 2)
+options(knitr.kable.NA = "")
+
+```
+
+# Sub-group Meta Analysis
+
+```{r fun-subgroup}
+
+report_subgroup <- function(mod, meta) {
+  note <- sprintf(
+    "Random model: Q = %s, df = %s, p = %s. Common model: Q = %s, df = %s, p = %s",
+    round(mod$Q.b.random, 2),
+    round(mod$df.Q.b.random, 2),
+    round(mod$pval.Q.b.random, 3),
+    round(mod$Q.b.common, 2),
+    round(mod$df.Q.b.common, 2),
+    round(mod$pval.Q.b.common, 3)
+  )
+
+  res <- meta %>%
+    kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
+      "Label", "K", "Fixed (\\%)", "Random (\\%)", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+    )) %>%
+    add_header_above(c(" " = 2, "Prevalence [95% CI]" = 2, "Heterogeneity" = 3)) %>%
+    footnote(general = note, general_title = "Between group differences") %>%
+    kable_styling(font_size = 10, latex_options = c("repeat_header"))
+  return(res)
+}
+
+```
+
+## Inverse-Variance Method {#sec-subgroup}
+
+{{< include subgroup/invar.qmd >}}
+
+## Inverse-Variance Method, Preserved Outliers {#sec-subgroup-nodrop}
+
+{{< include subgroup/invar-nodrop.qmd >}}
+
+## Inverse-Variance Method, Trimmed Anomalies {#sec-subgroup-trim}
+
+{{< include subgroup/invar-trim.qmd >}}
+
+## GLMM Method {#sec-subgroup-glmm}
+
+{{< include subgroup/glmm.qmd >}}
+

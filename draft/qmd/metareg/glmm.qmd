@@ -2,8 +2,12 @@
 #| fig-cap: Diagnostic plot of the meta-regression model
 #| fig-pos: H
 
- #tar_read(meta_reg) %T>% plot()
-tar_read(meta_reg) %>% summary()
+tar_read(meta_reg_glmm) %>%
+  {tryCatch(
+    plot(.),
+    error = \(e) print(e),
+    finally = print(summary(.))
+  )}
 
 ```
 
@@ -12,11 +16,11 @@ tar_read(meta_reg) %>% summary()
 \KOMAoptions{paper=landscape,pagesize}
 \recalctypearea
 
-```{r fig-metareg}
+```{r fig-metareg-glmm}
 #| fig-cap: Bubble plot on a meta-regression model incorporating year and diagnostic criteria as covariates in determining the prevalence of depression
 #| fig-pos: H
 
-tar_read(plt_metareg)
+tar_read(plt_metareg_glmm)
 
 ```
 

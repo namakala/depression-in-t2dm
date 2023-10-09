@@ -85,21 +85,39 @@ meta_eda$year %>% report_meta()
 
 ```
 
-### Grouped by country
+### Grouped by continent
 
-```{r tbl-bias-country}
+```{r tbl-bias-continent}
 #| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by countries
 
 tar_load(bias_eda)
-bias_eda$clean_country %>% report_bias()
+bias_eda$continent %>% report_bias()
 
 ```
 
-```{r tbl-meta-country}
+```{r tbl-meta-continent}
 #| tbl-cap: Pooling effect size in all primary studies, subsetted by countries
 
 tar_load(meta_eda)
-meta_eda$clean_country %>% report_meta()
+meta_eda$continent %>% report_meta()
+
+```
+
+### Grouped by region
+
+```{r tbl-bias-region}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by countries
+
+tar_load(bias_eda)
+bias_eda$region %>% report_bias()
+
+```
+
+```{r tbl-meta-region}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by countries
+
+tar_load(meta_eda)
+meta_eda$region %>% report_meta()
 
 ```
 

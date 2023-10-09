@@ -10,7 +10,8 @@
     - Outliers were removed when pooling the effect size in favor of improving the homogeneity:
       - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies without outliers
       - Exploratory data analysis (EDA) grouped by year contains `r n_eda["year"]` studies without outliers
-      - EDA grouped by country contains `r n_eda["clean_country"]` studies without outliers
+      - EDA grouped by continent contains `r n_eda["continent"]` studies without outliers
+      - EDA grouped by region contains `r n_eda["region"]` studies without outliers
       - EDA grouped by diagnostic criteria contains `r n_eda["clean_criteria"]` studies without outliers
       - EDA grouped by psychometric instrument contains `r n_eda["clean_instrument"]` studies without outliers
       - Meta-analysis on whole clean data contains `r sum(tar_read(bias_all)$N)` studies without outliers

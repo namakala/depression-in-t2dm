@@ -1,9 +1,0 @@
-```{r lst-subgroup-country, eval = FALSE}
-
-report_subgroup(
-  tar_read(subgroup_analysis)$clean_country,
-  tar_read(meta_subgroup)$clean_country %>% {.[order(.$N, decreasing = TRUE), ]}
-)
-
-```
-

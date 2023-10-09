@@ -1,9 +1,0 @@
-```{r lst-subgroup-glmmincl-year}
-
-report_subgroup(
-  tar_read(subgroup_glmm)$incl_year,
-  tar_read(meta_subgroup_glmm)$incl_year
-)
-
-```
-

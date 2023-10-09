@@ -1,0 +1,41 @@
+# Executive Summary {-}
+
+```{r init}
+
+pkgs <- c("magrittr", "targets", "kableExtra")
+pkgs_load <- sapply(pkgs, library, character.only = TRUE)
+
+options(digits = 2)
+options(knitr.kable.NA = "")
+
+getES <- function(meta, type = "Random") {
+  sub_meta <- meta %>% subset(.$Author == type)
+  return(sub_meta)
+}
+
+reportES <- function(ES) {
+  msg <- sprintf("%s%% [%s%%; p %s]", round(ES$`%`, 2), ES$`95% CI`, ES$p)
+  return(msg)
+}
+
+n_eda <- sapply(tar_read(bias_eda), \(x) sum(x$N))
+
+es_all <- getES(tar_read(meta_all)) %>% reportES()
+
+es_eda <- lapply(tar_read(meta_eda), getES) %>%
+  lapply("[[", "%") %>%
+  sapply(mean)
+
+es_author <- getES(tar_read(meta_author)) %>%
+  extract2("%") %>%
+  mean(na.rm = TRUE)
+
+tar_load(meta_reg)
+
+```
+
+
+{{< include qmd/executive-summary.qmd >}}
+
+{{< pagebreak >}}
+

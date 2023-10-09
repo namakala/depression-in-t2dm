@@ -1,0 +1,66 @@
+### Grouped by year of review {#sec-subgroup-glmm-year}
+
+```{r lst-subgroup-glmm-year}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$year,
+  tar_read(meta_subgroup_glmm)$year
+)
+
+```
+
+### Grouped by published year {#sec-subgroup-glmm-incl-year}
+
+```{r lst-subgroup-glmmincl-year}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$incl_year,
+  tar_read(meta_subgroup_glmm)$incl_year
+)
+
+```
+
+### Grouped by continent {#sec-subgroup-glmm-continent}
+
+```{r lst-subgroup-glmm-continent}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$continent,
+  tar_read(meta_subgroup_glmm)$continent
+)
+
+```
+
+### Grouped by region {#sec-subgroup-glmm-region}
+
+```{r lst-subgroup-glmm-region}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$region,
+  tar_read(meta_subgroup_glmm)$region
+)
+
+```
+
+### Grouped by criteria {#sec-subgroup-glmm-criteria}
+
+```{r lst-subgroup-glmm-criteria}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$clean_criteria,
+  tar_read(meta_subgroup_glmm)$clean_criteria
+)
+
+```
+
+### Grouped by instrument {#sec-subgroup-glmm-instrument}
+
+```{r lst-subgroup-glmm-instrument}
+
+report_subgroup(
+  tar_read(subgroup_glmm)$clean_instrument,
+  tar_read(meta_subgroup_glmm)$clean_instrument
+)
+
+```
+

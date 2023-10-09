@@ -1,9 +1,0 @@
-```{r lst-subgroup-glmmcriteria}
-
-report_subgroup(
-  tar_read(subgroup_glmm)$clean_criteria,
-  tar_read(meta_subgroup_glmm)$clean_criteria
-)
-
-```
-

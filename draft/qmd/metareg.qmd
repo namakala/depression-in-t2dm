@@ -1,0 +1,28 @@
+```{r init}
+
+pkgs <- c("magrittr", "targets", "kableExtra")
+pkgs_load <- sapply(pkgs, library, character.only = TRUE)
+
+options(digits = 2)
+options(knitr.kable.NA = "")
+
+```
+
+# Meta Regression {#sec-metareg}
+
+## Inverse-Variance Method {#sec-metareg-invar}
+
+{{< include metareg/invar.qmd >}}
+
+## Inverse-Variance Method, Preserved Outliers {#sec-metareg-nodrop}
+
+{{< include metareg/invar-nodrop.qmd >}}
+
+## Inverse-Variance Method, Trimmed Anomalies {#sec-metareg-trim}
+
+{{< include metareg/invar-trim.qmd >}}
+
+## GLMM Method {#sec-metareg-glmm}
+
+{{< include metareg/glmm.qmd >}}
+
