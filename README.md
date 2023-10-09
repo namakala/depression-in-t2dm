@@ -45,6 +45,10 @@ This is the analysis pipeline for conducting analysis in an umbrella
 review. The complete flow can be viewed in the following `mermaid`
 diagram:
 
+During startup - Warning messages: 1: Setting LC_COLLATE failed, using
+“C” 2: Setting LC_TIME failed, using “C” 3: Setting LC_MESSAGES failed,
+using “C” 4: Setting LC_MONETARY failed, using “C”
+
 ``` mermaid
 graph LR
   subgraph legend

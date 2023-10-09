@@ -119,5 +119,5 @@ list(
 
   # Documentation and reporting
   tar_quarto(readme, "README.qmd"),
-  tar_quarto(report, "draft")
+  tar_quarto(report, "draft", error = "continue")
 )
