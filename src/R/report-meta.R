@@ -52,7 +52,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
     geom_abline(intercept = meta_reg$b[1], slope = meta_reg$b[2], linewidth = 1, colour = "#434C5E") +
     geom_point(alpha = alpha, aes(color = clean_criteria)) +
     annotate("text", x = 1998, y = 0.29, parse = TRUE, label = eq) +
-    scale_y_continuous(labels = scales::percent) +
+    scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
     scale_size(guide = "none") +
     guides(color = guide_legend("")) +
     labs(
