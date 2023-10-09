@@ -24,6 +24,11 @@ itergroup <- c(
 ) %>%
   set_names(., .)
 
+# Configure target options
+tar_option_set(
+  packages = c("magrittr", "tidyr", "dplyr")
+)
+
 # Initiate analysis pipeline
 list(
 
@@ -118,6 +123,6 @@ list(
   tar_target(plt_metareg_sub_glmm, vizMetareg(meta_reg_sub_glmm)),
 
   # Documentation and reporting
-  tar_quarto(readme, "README.qmd"),
-  tar_quarto(report, "draft", error = "continue")
+  tar_quarto(readme, "README.qmd", priority = 0),
+  tar_quarto(report, "draft", error = "continue", priority = 0)
 )
