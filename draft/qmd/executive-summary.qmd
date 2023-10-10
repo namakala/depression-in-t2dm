@@ -8,8 +8,8 @@
   - General steps:
     - Extracted studies which 95% CI expands beyond the pooled confidence interval is regarded as outliers
     - Outliers were removed when pooling the effect size in favor of improving the homogeneity:
-      - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies without outliers
-      - Exploratory data analysis (EDA) grouped by year contains `r n_eda["year"]` studies without outliers
+      - Re-analysis of included reviews contains `r sum(tar_read(bias_author)$N)` studies with outliers
+      - Exploratory data analysis (EDA) grouped by year contains `r n_eda["year"]` studies with outliers
       - EDA grouped by continent contains `r n_eda["continent"]` studies without outliers
       - EDA grouped by region contains `r n_eda["region"]` studies without outliers
       - EDA grouped by diagnostic criteria contains `r n_eda["clean_criteria"]` studies without outliers

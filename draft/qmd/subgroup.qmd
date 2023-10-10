@@ -47,7 +47,14 @@ report_subgroup <- function(mod, meta) {
 
 {{< include subgroup/invar-trim.qmd >}}
 
+## Inverse-Variance Method, Subset of Data {#sec-subgroup-invar-sub}
+
+{{< include subgroup/invar-sub.qmd >}}
+
 ## GLMM Method {#sec-subgroup-glmm}
 
 {{< include subgroup/glmm.qmd >}}
 
+## GLMM Method, Subset of Data {#sec-subgroup-glmm-sub}
+
+{{< include subgroup/glmm-sub.qmd >}}

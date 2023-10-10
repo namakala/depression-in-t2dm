@@ -22,7 +22,15 @@ options(knitr.kable.NA = "")
 
 {{< include metareg/invar-trim.qmd >}}
 
+## Inverse-Variance Method, Subset of Data {#sec-metareg-invar-sub}
+
+{{< include metareg/invar-sub.qmd >}}
+
 ## GLMM Method {#sec-metareg-glmm}
 
 {{< include metareg/glmm.qmd >}}
+
+## GLMM Method, Subset of Data {#sec-metareg-glmm-sub}
+
+{{< include metareg/glmm-sub.qmd >}}
 

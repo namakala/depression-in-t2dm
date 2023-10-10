@@ -146,7 +146,7 @@ poolES <- function(tbl, rm_outlier = TRUE, ...) {
   }
 
   res %<>%
-    meta::metabias(method = "linreg", k.min = 5)
+    meta::metabias(method = "linreg", k.min = 3)
 
   return(res)
 }
