@@ -188,10 +188,13 @@ fitSubgroup <- function(meta_res, group, ...) {
   #' @inheritDotParams meta::update.meta
   bias <- meta_res
   mod  <- bias$x
-  res  <- meta::update.meta(
-    mod,
-    subgroup = get(group),
-    ...
+  res  <- tryCatch(
+    meta::update.meta(
+      mod,
+      subgroup = get(group),
+      ...
+    ),
+    error = \(e) NA
   )
 
   return(res)

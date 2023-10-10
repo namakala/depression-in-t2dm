@@ -90,6 +90,15 @@ list(
   tar_target(meta_reg_glmm, fitRegression(pooled_glmm, ~ incl_year + clean_criteria)),
   tar_target(plt_metareg_glmm, vizMetareg(meta_reg_glmm)),
 
+  # Pooling ES, GLMM method, logit link function, no drop
+  tar_target(pooled_nodrop_glmm, poolES(tbl_clean, sm = "PLOGIT", method = "GLMM", rm_outlier = FALSE)),
+  tar_target(meta_nodrop_glmm, reportMeta(pooled_nodrop_glmm, type = "meta", logit2p = TRUE)),
+  tar_target(bias_nodrop_glmm, reportMeta(pooled_nodrop_glmm, type = "bias", logit2p = TRUE)),
+  tar_target(subgroup_nodrop_glmm, lapply(itergroup, \(group) fitSubgroup(pooled_nodrop_glmm, group)) %>% extract(!is.na(.))),
+  tar_target(meta_subgroup_nodrop_glmm, lapply(subgroup_nodrop_glmm, \(group) reportMeta(group, type = "subgroup", logit2p = TRUE))),
+  tar_target(meta_reg_nodrop_glmm, fitRegression(pooled_nodrop_glmm, ~ incl_year + clean_criteria)),
+  tar_target(plt_metareg_nodrop_glmm, vizMetareg(meta_reg_nodrop_glmm)),
+
   # Pooling ES, GLMM method, logit link function, trimmed anomalies
   tar_target(pooled_trim_glmm, poolES(tbl_trim, sm = "PLOGIT", method = "GLMM")),
   tar_target(meta_trim_glmm, reportMeta(pooled_trim_glmm, type = "meta")),

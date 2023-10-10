@@ -55,6 +55,14 @@ report_subgroup <- function(mod, meta) {
 
 {{< include subgroup/glmm.qmd >}}
 
+## GLMM Method, Preserved Outliers {#sec-subgroup-glmm-nodrop}
+
+{{< include subgroup/glmm-nodrop.qmd >}}
+
+## GLMM Method, Trimmed Anomalies {#sec-subgroup-glmm-trim}
+
+{{< include subgroup/glmm-trim.qmd >}}
+
 ## GLMM Method, Subset of Data {#sec-subgroup-glmm-sub}
 
 {{< include subgroup/glmm-sub.qmd >}}

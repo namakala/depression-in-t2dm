@@ -30,6 +30,14 @@ options(knitr.kable.NA = "")
 
 {{< include metareg/glmm.qmd >}}
 
+## GLMM Method, Preserved Outliers {#sec-metareg-glmm-nodrop}
+
+{{< include metareg/glmm-nodrop.qmd >}}
+
+## GLMM Method, Trimmed Anomalies {#sec-metareg-glmm-trim}
+
+{{< include metareg/glmm-trim.qmd >}}
+
 ## GLMM Method, Subset of Data {#sec-metareg-glmm-sub}
 
 {{< include metareg/glmm-sub.qmd >}}

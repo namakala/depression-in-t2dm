@@ -48,9 +48,20 @@ This is the analysis pipeline for conducting analysis in an umbrella
 review. The complete flow can be viewed in the following `mermaid`
 diagram:
 
+renv 1.0.3 was loaded from project library, but this project is
+configured to use renv 1.0.0. - Use `renv::record("renv@1.0.3")` to
+record renv 1.0.3 in the lockfile. - Use
+`renv::restore(packages = "renv")` to install renv 1.0.0 into the
+project library. - The project is out-of-sync – use `renv::status()` for
+details. During startup - Warning messages: 1: Setting LC_COLLATE
+failed, using “C” 2: Setting LC_TIME failed, using “C” 3: Setting
+LC_MESSAGES failed, using “C” 4: Setting LC_MONETARY failed, using “C”
+
 ``` mermaid
 graph LR
-  subgraph legend
+  style Legend fill:#FFFFFF00,stroke:#000000;
+  style Graph fill:#FFFFFF00,stroke:#000000;
+  subgraph Legend
     direction LR
     x0a52b03877696646([""Outdated""]):::outdated --- x7420bd9270f8d27d([""Up to date""]):::uptodate
     x7420bd9270f8d27d([""Up to date""]):::uptodate --- x5b3426b4c7fa7dbc([""Started""]):::started
