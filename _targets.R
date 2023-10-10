@@ -39,11 +39,14 @@ list(
 
   # Reproduce meta-analysis from previous reviews
   tar_target(pooled_author, iterate(tbl, "author_year", sm = "PRAW", rm_outlier = FALSE)),
-  tar_target(pooled_groups, iterate(tbl_clean, itergroup, sm = "PRAW", rm_outlier = FALSE)),
+  tar_target(pooled_groups, iterate(tbl_clean, itergroup, sm = "PRAW", rm_outlier = TRUE)),
+  tar_target(pooled_groups_nodrop, iterate(tbl_clean, itergroup, sm = "PRAW", rm_outlier = FALSE)),
   tar_target(meta_author, mkReport(pooled_author, report_type = "meta")),
   tar_target(bias_author, mkReport(pooled_author, report_type = "bias")),
   tar_target(meta_eda, lapply(pooled_groups, mkReport, report_type = "meta")),
   tar_target(bias_eda, lapply(pooled_groups, mkReport, report_type = "bias")),
+  tar_target(meta_eda_nodrop, lapply(pooled_groups_nodrop, mkReport, report_type = "meta")),
+  tar_target(bias_eda_nodrop, lapply(pooled_groups_nodrop, mkReport, report_type = "bias")),
 
   # Pooling ES inverse-variance method, no transformation
   tar_target(pooled_all, poolES(tbl_clean, sm = "PRAW", rm_outlier = TRUE)),

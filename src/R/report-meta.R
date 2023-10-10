@@ -171,7 +171,7 @@ reportMeta <- function(meta_res, type = "meta", ...) {
     meta <- bias$x
 
     # Preserve data consistency
-    if (!"exclude" %in% names(bias$x$data)) {
+    if (!".exclude" %in% names(bias$x$data)) {
       bias$x$exclude <-
         bias$x$data$.exclude <-
         meta$exclude <-

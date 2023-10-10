@@ -67,7 +67,76 @@ sub_meta %>%
 ```
 
 
+#### No transformation, inverse-variance method, preserved outliers
+
+```{r tbl-bias-all-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies
+
+tar_read(bias_all_nodrop) %>%
+  subset(select = -c(tau, Rb)) %>%
+  kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
+    "N", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+  )) %>%
+  add_header_above(c(" " = 1, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+```{r tbl-meta-all-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies
+
+sub_meta <- tar_read(meta_all_nodrop) %>%
+  subset(!.$Exclude, select = -c(Exclude))
+
+to_bold  <- sub_meta %>% {which(.$Author %in% c("Random", "Fixed"))}
+to_color <- sub_meta %>% {which(.$Author == "Prediction")}
+
+sub_meta %>%
+  kable(booktabs = TRUE, longtable = TRUE) %>%
+  add_header_above(c(" " = 2, "Prevalence" = 4, "Weight (%)" = 2)) %>%
+  row_spec(to_bold, bold = TRUE) %>%
+  row_spec(to_color, bold = TRUE, background = "#D8DEE9") %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+#### Logit link function, GLMM method, preserved outliers
+
+```{r tbl-bias-glmm-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies
+
+tar_read(bias_nodrop_glmm) %>%
+  subset(select = -c(tau, Rb)) %>%
+  kable(booktabs = TRUE, longtable = TRUE, escape = FALSE, col.names = c(
+    "N", "$\\beta$", "SE", "$p$", "$I^2$ (\\%)", "$H^2$", "$\\tau^2$"
+  )) %>%
+  add_header_above(c(" " = 1, "Egger's test" = 3, "Heterogeneity [95% CI]" = 3)) %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+```{r tbl-meta-glmm-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies
+
+sub_meta <- tar_read(meta_nodrop_glmm) %>%
+  subset(!.$Exclude, select = -c(Exclude))
+
+to_bold  <- sub_meta %>% {which(.$Author %in% c("Random", "Fixed"))}
+to_color <- sub_meta %>% {which(.$Author == "Prediction")}
+
+sub_meta %>%
+  kable(booktabs = TRUE, longtable = TRUE) %>%
+  add_header_above(c(" " = 2, "Prevalence" = 4, "Weight (%)" = 2)) %>%
+  row_spec(to_bold, bold = TRUE) %>%
+  row_spec(to_color, bold = TRUE, background = "#D8DEE9") %>%
+  kable_styling(font_size = 7, latex_options = c("repeat_header"))
+
+```
+
+
 ### Grouped by year
+
+#### No transformation, inverse-variance method
 
 ```{r tbl-bias-year}
 #| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by year
@@ -85,85 +154,157 @@ meta_eda$year %>% report_meta()
 
 ```
 
+#### No transformation, inverse-variance method, preserved outliers
+
+```{r tbl-bias-year-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by year
+
+tar_load(bias_eda_nodrop)
+bias_eda_nodrop$year %>% report_bias()
+
+```
+
+```{r tbl-meta-year-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by year
+
+tar_load(meta_eda_nodrop)
+meta_eda_nodrop$year %>% report_meta()
+
+```
+
 ### Grouped by continent
 
-```{r tbl-bias-continent}
-#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by countries
+#### No transformation, inverse-variance method
 
-tar_load(bias_eda)
+```{r tbl-bias-continent}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by continents
+
 bias_eda$continent %>% report_bias()
 
 ```
 
 ```{r tbl-meta-continent}
-#| tbl-cap: Pooling effect size in all primary studies, subsetted by countries
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by continents
 
-tar_load(meta_eda)
 meta_eda$continent %>% report_meta()
+
+```
+
+#### No transformation, inverse-variance method, preserved outliers
+
+```{r tbl-bias-continent-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by continents
+
+bias_eda_nodrop$continent %>% report_bias()
+
+```
+
+```{r tbl-meta-continent-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by continents
+
+meta_eda_nodrop$continent %>% report_meta()
 
 ```
 
 ### Grouped by region
 
-```{r tbl-bias-region}
-#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by countries
+#### No transformation, inverse-variance method
 
-tar_load(bias_eda)
+```{r tbl-bias-region}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by regions
+
 bias_eda$region %>% report_bias()
 
 ```
 
 ```{r tbl-meta-region}
-#| tbl-cap: Pooling effect size in all primary studies, subsetted by countries
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by regions
 
-tar_load(meta_eda)
 meta_eda$region %>% report_meta()
+
+```
+
+#### No transformation, inverse-variance method, preserved outliers
+
+```{r tbl-bias-region-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by regions
+
+bias_eda_nodrop$region %>% report_bias()
+
+```
+
+```{r tbl-meta-region-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by regions
+
+meta_eda_nodrop$region %>% report_meta()
 
 ```
 
 ### Grouped by criteria
 
-```{r tbl-bias-criteria}
+#### No transformation, inverse-variance method
+
+```{r tbl-bias-clean-criteria}
 #| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by diagnostic criteria
 
-tar_load(bias_eda)
 bias_eda$clean_criteria %>% report_bias()
 
 ```
 
-```{r tbl-meta-criteria}
+```{r tbl-meta-clean-criteria}
 #| tbl-cap: Pooling effect size in all primary studies, subsetted by diagnostic criteria
 
-tar_load(meta_eda)
 meta_eda$clean_criteria %>% report_meta()
 
 ```
 
-{{< pagebreak >}}
+#### No transformation, inverse-variance method, preserved outliers
 
-\KOMAoptions{paper=landscape,pagesize}
-\recalctypearea
+```{r tbl-bias-clean_criteria-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by diagnostic criteria
+
+bias_eda_nodrop$clean_criteria %>% report_bias()
+
+```
+
+```{r tbl-meta-clean_criteria-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by diagnostic criteria
+
+meta_eda_nodrop$clean_criteria %>% report_meta()
+
+```
 
 ### Grouped by instrument
 
-```{r tbl-bias-instrument}
-#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by psychometric instruments
+#### No transformation, inverse-variance method
 
-tar_load(bias_eda)
+```{r tbl-bias-clean-instrument}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by psychometric instrument
+
 bias_eda$clean_instrument %>% report_bias()
 
 ```
 
-```{r tbl-meta-instrument}
-#| tbl-cap: Pooling effect size in all primary studies, subsetted by psychometric instruments
+```{r tbl-meta-clean-instrument}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by psychometric instrument
 
-tar_load(meta_eda)
 meta_eda$clean_instrument %>% report_meta()
 
 ```
 
-{{< pagebreak >}}
+#### No transformation, inverse-variance method, preserved outliers
 
-\KOMAoptions{paper=portrait,pagesize}
-\recalctypearea
+```{r tbl-bias-clean_instrument-nodrop}
+#| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by psychometric instrument
+
+bias_eda_nodrop$clean_instrument %>% report_bias()
+
+```
+
+```{r tbl-meta-clean_instrument-nodrop}
+#| tbl-cap: Pooling effect size in all primary studies, subsetted by psychometric instrument
+
+meta_eda_nodrop$clean_instrument %>% report_meta()
+
+```
 
