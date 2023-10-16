@@ -62,7 +62,8 @@ cleanData <- function(tbl) {
         {ifelse(grepl(x = ., "PHQ", ignore.case = TRUE), "PHQ", .)} %>%
         {ifelse(grepl(x = ., "BDI", ignore.case = TRUE), "BDI", .)} %>%
         {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag"), ., "Others")}
-    })
+    }) %>%
+    inset2("quality", value = factor(.$quality, levels = c("Low", "Medium", "High")))
 
   return(tbl_clean)
 }

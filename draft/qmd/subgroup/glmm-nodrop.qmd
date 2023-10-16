@@ -53,3 +53,14 @@ report_subgroup(
 
 ```
 
+### Grouped by quality {#sec-subgroup-nodrop-glmm-quality}
+
+```{r lst-subgroup-nodrop-glmm-quality}
+
+report_subgroup(
+  tar_read(subgroup_nodrop_glmm)$quality,
+  tar_read(meta_subgroup_nodrop_glmm)$quality
+)
+
+```
+

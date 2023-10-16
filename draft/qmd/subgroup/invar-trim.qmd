@@ -64,3 +64,14 @@ report_subgroup(
 
 ```
 
+### Grouped by quality {#sec-subgroup-trim-quality}
+
+```{r lst-subgroup-trim-quality}
+
+report_subgroup(
+  tar_read(subgroup_trim)$quality,
+  tar_read(meta_subgroup_trim)$quality
+)
+
+```
+

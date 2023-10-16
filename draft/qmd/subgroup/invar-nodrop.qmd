@@ -64,3 +64,14 @@ report_subgroup(
 
 ```
 
+### Grouped by quality {#sec-subgroup-nodrop-quality}
+
+```{r lst-subgroup-nodrop-quality}
+
+report_subgroup(
+  tar_read(subgroup_nodrop)$quality,
+  tar_read(meta_subgroup_nodrop)$quality
+)
+
+```
+

@@ -70,3 +70,14 @@ report_subgroup(
 
 ```
 
+### Grouped by quality {#sec-subgroup-trim-glmm-quality}
+
+```{r lst-subgroup-trim-glmm-quality}
+
+report_subgroup(
+  tar_read(subgroup_trim_glmm)$quality,
+  tar_read(meta_subgroup_trim_glmm)$quality
+)
+
+```
+

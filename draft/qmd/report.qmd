@@ -42,11 +42,11 @@ reportES <- function(ES) {
   return(msg)
 }
 
-n_eda <- sapply(tar_read(bias_eda), \(x) sum(x$N))
+n_eda <- sapply(tar_read(bias_eda_nodrop), \(x) sum(x$N))
 
-es_all <- getES(tar_read(meta_all)) %>% reportES()
+es_all <- getES(tar_read(meta_all_nodrop)) %>% reportES()
 
-es_eda <- lapply(tar_read(meta_eda), getES) %>%
+es_eda <- lapply(tar_read(meta_eda_nodrop), getES) %>%
   lapply("[[", "%") %>%
   sapply(mean)
 
@@ -54,11 +54,17 @@ es_author <- getES(tar_read(meta_author)) %>%
   extract2("%") %>%
   mean(na.rm = TRUE)
 
-tar_load(meta_reg)
+tar_load(meta_reg_nodrop)
 
 ```
 
 # Exploratory Data Analysis
+
+## Descriptive Statistics
+
+{{< include descriptive.qmd >}}
+
+{{< pagebreak >}}
 
 ## Re-analysis of Included Reviews
 
