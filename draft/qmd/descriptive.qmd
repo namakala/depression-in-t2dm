@@ -1,0 +1,32 @@
+```{r tbl-summary}
+#| tbl-cap: Descriptive statistics of deduplicated entries
+
+tar_read(desc_clean) %>%
+  gtsummary::as_hux_table()
+
+```
+
+```{r fig-pair-region, echo = FALSE}
+#| fig-cap: Pair plot of depression prevalence grouped by region
+#| fig-pos: H
+
+tar_load(plt_pair_clean)
+plt_pair_clean$region
+
+```
+
+```{r fig-pair-clean_instrument, echo = FALSE}
+#| fig-cap: Pair plot of depression prevalence grouped by diagnostic instruments
+#| fig-pos: H
+
+plt_pair_clean$clean_instrument
+
+```
+
+```{r fig-pair-quality, echo = FALSE}
+#| fig-cap: Pair plot of depression prevalence grouped by quality
+#| fig-pos: H
+
+plt_pair_clean$quality
+
+```
