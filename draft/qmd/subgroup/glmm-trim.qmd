@@ -19,7 +19,7 @@ tryCatch(
 tryCatch(
   report_subgroup(
     tar_read(subgroup_trim_glmm)$incl_year,
-    tar_read(meta_subgroup_trim_glmm)$incl_year
+    tar_read(meta_subgroup_trim_glmm)$incl_year %>% {.[order(.$Group, decreasing = FALSE), ]}
   ),
   error = \(e) paste(e)
 )

@@ -20,14 +20,13 @@
     - Grouped by psychometric instrument: `r es_eda["clean_instrument"]`%
   - Considering the number of outliers and differences between EDA result and whole dataset meta-analysis, it appears that subgroup analysis is necessary
   - Results from subgroup analysis in @sec-subgroup-nodrop indicates higher within difference than between difference, implying high variance even within the subgroup
-  - Meta-regression indicates a growing prevalence of depression at the rate of `r round(meta_reg$b[2] * 100, 2)`% per year
 - What to include in the report?
   - @tbl-bias-author
-  - @tbl-bias-all
-  - @tbl-meta-all
+  - @tbl-bias-all-nodrop
+  - @tbl-meta-all-nodrop
   - @sec-subgroup-nodrop-incl-year
   - @sec-subgroup-nodrop-region
   - @sec-subgroup-nodrop-criteria
-  - @sec-metareg
-  - @fig-metareg
+  - @sec-metareg-nodrop
+  - @fig-metareg-nodrop
 

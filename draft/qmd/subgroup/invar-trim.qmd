@@ -15,7 +15,7 @@ report_subgroup(
 
 report_subgroup(
   tar_read(subgroup_trim)$incl_year,
-  tar_read(meta_subgroup_trim)$incl_year
+  tar_read(meta_subgroup_trim)$incl_year %>% {.[order(.$Group, decreasing = FALSE), ]}
 )
 
 ```

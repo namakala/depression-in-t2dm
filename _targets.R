@@ -137,4 +137,5 @@ list(
   # Documentation and reporting
   tar_quarto(readme, "README.qmd", priority = 0),
   tar_quarto(report, "draft", error = "continue", priority = 0)
+
 )
