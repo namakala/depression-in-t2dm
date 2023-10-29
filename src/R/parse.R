@@ -16,7 +16,16 @@ readData <- function(path, ...) {
     )) %>%
     inset2("incl_author_year", value = sprintf(
       "%s (%s)", gsub(x = .$incl_author, "^(\\w+).*", "\\1"), .$incl_year
-    ))
+    )) %>%
+    inset2("region", value = factor(.$region, levels = c(
+      "Region of the Americas",
+      "European Region",
+      "Western Pacific Region",
+      "Eastern Mediterranean Region",
+      "South-East Asian Region",
+      "African Region",
+      "Unclassified"
+    )))
 
   return(tbl)
 }
@@ -61,7 +70,8 @@ cleanData <- function(tbl) {
         {gsub(x = ., "\\s+([<>].*|&.*|\\n)", "")} %>%
         {ifelse(grepl(x = ., "PHQ", ignore.case = TRUE), "PHQ", .)} %>%
         {ifelse(grepl(x = ., "BDI", ignore.case = TRUE), "BDI", .)} %>%
-        {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag"), ., "Others")}
+        {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag"), ., "Others")} %>%
+        factor(levels = c("Clinical Diagnosis", "BDI", "PHQ", "Others"))
     }) %>%
     inset2("quality", value = factor(.$quality, levels = c("Low", "Medium", "High")))
 
