@@ -13,15 +13,37 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
 
   is_glmm <- any(class(meta_reg) == "rma.glmm")
 
-  eq <- with(meta_reg,
-    sprintf(
-      "'Prevalence (%%)' == %s %s * x[1] %s * x[2]",
-      round(100 * b[1], 2),
-      round(100 * b[2], 2) %>% {ifelse(. > 0, paste0("+", .), .)},
-      round(100 * b[3], 2) %>% {ifelse(. > 0, paste0("+", .), .)}
-    )
-  )
+  # Extract the beta estimates
+  beta_val <- round(meta_reg$b * 100, 2) %>%
+    {ifelse(. > 0, paste0("+", .), .)} %>%
+    data.frame() %>%
+    set_names("beta") %>%
+    inset2("region", value = gsub(x = rownames(.), "region|cl\\w*ment", ""))
 
+  # Get the reference region
+  ref_region <- tbl$region %>% unique() %>% {.[!. %in% beta_val$region]}
+
+  # Generate equation for each region
+  tbl_eq <- beta_val %>%
+    subset(grepl(x = rownames(.), "region")) %>%
+    inset2("label", value = {
+      sprintf(
+        "'Prevalence (%%)' == %s %s * x[1] + ...",
+        beta_val$beta[1],
+        .$beta
+      )
+    }) %>%
+    set_rownames(c()) %>%
+    subset(.$region != "Unclassified") %>%
+    extract(c("region", "label")) %>%
+    rbind(list("region" = ref_region, "label" = "Reference"))
+
+  # Merge equation into the data frame, remove unclassified
+  tbl %<>%
+    subset(.$region != "Unclassified") %>%
+    merge(tbl_eq, by = "region")
+
+  # Generate subtitle and initiate the canvas
   if (is_glmm) {
 
     subtitle <- sprintf(
@@ -32,7 +54,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
       tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
     )
 
-    canvas <- ggplot(tbl, aes(x = incl_year, y = .event / .n, size = weight))
+    canvas <- ggplot(tbl, aes(x = incl_year, y = .event / .n))
 
   } else {
 
@@ -44,14 +66,16 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
       tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
     )
 
-    canvas <- ggplot(tbl, aes(x = incl_year, y = .TE, size = weight))
+    canvas <- ggplot(tbl, aes(x = incl_year, y = .TE))
 
   }
 
+  # Create the figure
   plt <- canvas +
-    geom_abline(intercept = meta_reg$b[1], slope = meta_reg$b[2], linewidth = 1, colour = "#434C5E") +
-    geom_point(alpha = alpha, aes(color = clean_criteria)) +
-    annotate("text", x = 1998, y = 0.29, parse = TRUE, label = eq) +
+    geom_smooth(method = "lm", colour = "#434C5E") +
+    geom_point(alpha = alpha, aes(color = clean_instrument, size = weight)) +
+    facet_wrap(~ region, scales = "free") +
+    geom_text(data = tbl_eq, aes(x = -Inf, y = Inf, label = label), parse = TRUE, hjust = -0.1, vjust = 1, size = 3) +
     scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
     scale_size(guide = "none") +
     guides(color = guide_legend("")) +
@@ -61,10 +85,17 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
       x = "Year of Publication", y = "Depression Prevalence"
     ) +
     theme_minimal() +
-    theme(legend.position = c(0, 0.95), legend.direction = "horizontal", legend.justification = c("left", "bottom"))
+    theme(legend.position = "top", legend.direction = "horizontal", legend.justification = c("left", "bottom"))
+
+  plt_annotated <- plt +
+    geom_text(
+      data = tbl_eq, aes(x = -Inf, y = -Inf, label = label)
+    )
 
   return(plt)
 }
+
+vizMetareg(tar_read(meta_reg_nodrop))
 
 getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE, ...) {
   #' Calculate the Confidence Interval
