@@ -8,8 +8,21 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   #' @param meta_reg A meta-regression object from `meta::metareg`
   #' @return GGPlot2 object
   require("ggplot2")
+
+  # Extract the model matrix without intercept to perform prediction
+  mod_mtx   <- meta_reg$X.f[, -1]
+  pred_prev <- meta_reg %>%
+    metafor::predict.rma(newmods = mod_mtx) %>%
+    data.frame() %>%
+    merge(mod_mtx, by = "row.names") %>%
+    subset(select = c(pred, ci.lb, ci.ub))
+
   tbl <- meta_reg$data %>%
-    inset2("weight", value = 1 / sqrt(meta_reg$vi.f))
+    inset2("weight", value = 1 / sqrt(meta_reg$vi.f)) %>%
+    inset(names(pred_prev), value = pred_prev) %>%
+    dplyr::group_by(region) %>%
+    dplyr::mutate("min" = min(ci.lb), "max" = max(ci.ub)) %>%
+    dplyr::ungroup()
 
   is_glmm <- any(class(meta_reg) == "rma.glmm")
 
@@ -28,8 +41,8 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
     subset(grepl(x = rownames(.), "region")) %>%
     inset2("label", value = {
       sprintf(
-        "'Prevalence (%%)' == %s %s * x[1] + ...",
-        beta_val$beta[1],
+        #"'Prevalence (%%)' == %s %s * x[1] + ...",
+        "'Prevalence %s%%'",
         .$beta
       )
     }) %>%
@@ -72,30 +85,31 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
 
   # Create the figure
   plt <- canvas +
-    geom_smooth(method = "lm", colour = "#434C5E") +
-    geom_point(alpha = alpha, aes(color = clean_instrument, size = weight)) +
-    facet_wrap(~ region, scales = "free") +
+    #geom_smooth(method = "lm", colour = "#434C5E") +
+    geom_point(alpha = alpha * 0.8, aes(color = clean_instrument, size = weight)) +
+    geom_point(aes(y = pred, color = clean_instrument), alpha = alpha * 1.2, shape = 18) +
+    geom_ribbon(aes(ymin = min, ymax = max), alpha = alpha * 0.2) +
+    facet_wrap(~ factor(region, levels = levels(tbl$region)), scales = "free") +
     geom_text(data = tbl_eq, aes(x = -Inf, y = Inf, label = label), parse = TRUE, hjust = -0.1, vjust = 1, size = 3) +
     scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
     scale_size(guide = "none") +
     guides(color = guide_legend("")) +
     labs(
-      title = "Annual increase of depression prevalence among T2DM patients",
+      title = "The prediction of depression prevalence among T2DM patients",
       subtitle = subtitle,
+      caption = "The gray band represents predicted confidence interval across regions",
       x = "Year of Publication", y = "Depression Prevalence"
     ) +
     theme_minimal() +
-    theme(legend.position = "top", legend.direction = "horizontal", legend.justification = c("left", "bottom"))
-
-  plt_annotated <- plt +
-    geom_text(
-      data = tbl_eq, aes(x = -Inf, y = -Inf, label = label)
+    theme(
+      legend.position = "top",
+      legend.direction = "horizontal",
+      legend.justification = c("left", "bottom"),
+      panel.grid.minor = element_blank()
     )
 
   return(plt)
 }
-
-vizMetareg(tar_read(meta_reg_nodrop))
 
 getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE, ...) {
   #' Calculate the Confidence Interval
