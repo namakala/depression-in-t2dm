@@ -30,7 +30,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
     inset2("weight", value = 1 / sqrt(meta_reg$vi.f)) %>%
     inset(names(pred_prev), value = pred_prev) %>%
     dplyr::group_by(region) %>%
-    dplyr::mutate("min" = min(ci.lb), "max" = max(ci.ub)) %>%
+    dplyr::mutate("min" = min(ci.lb, na.rm = TRUE), "max" = max(ci.ub, na.rm = TRUE)) %>%
     dplyr::ungroup()
 
   # Extract the beta estimates
@@ -92,15 +92,15 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
 
   # Create the figure
   plt <- canvas +
-    #geom_smooth(method = "lm", colour = "#434C5E") +
-    geom_point(alpha = alpha * 0.8, aes(color = clean_instrument, size = weight)) +
-    geom_point(aes(y = pred, color = clean_instrument), alpha = alpha * 1.2, shape = 18) +
     geom_ribbon(aes(ymin = min, ymax = max), alpha = alpha * 0.2) +
+    geom_point(alpha = alpha * 0.8, aes(color = clean_instrument, size = weight)) +
+    geom_point(aes(y = pred, size = weight, shape = "Predicted value"), alpha = alpha, color = "grey30") +
     facet_wrap(~ factor(region, levels = levels(tbl$region)), scales = "free") +
     geom_text(data = tbl_eq, aes(x = -Inf, y = Inf, label = label), parse = TRUE, hjust = -0.1, vjust = 1, size = 3) +
     scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
     scale_size(guide = "none") +
     guides(color = guide_legend("")) +
+    scale_shape_manual(values = c("Predicted value" = 18), name = "") +
     labs(
       title = "The prediction of depression prevalence among T2DM patients",
       subtitle = subtitle,
@@ -117,8 +117,6 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
 
   return(plt)
 }
-
-vizMetareg(tar_read(meta_reg_glmm))
 
 getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE, ...) {
   #' Calculate the Confidence Interval
