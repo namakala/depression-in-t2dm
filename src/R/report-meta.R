@@ -9,22 +9,29 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   #' @return GGPlot2 object
   require("ggplot2")
 
+  # Detect GLMM model
+  is_glmm <- any(class(meta_reg) == "rma.glmm")
+
   # Extract the model matrix without intercept to perform prediction
   mod_mtx   <- meta_reg$X.f[, -1]
+
   pred_prev <- meta_reg %>%
     metafor::predict.rma(newmods = mod_mtx) %>%
     data.frame() %>%
     merge(mod_mtx, by = "row.names") %>%
     subset(select = c(pred, ci.lb, ci.ub))
 
+  if (is_glmm) { # Need to exponentiate the log scale
+    pred_prev %<>% exp()
+  }
+
+  # Configure table for plotting
   tbl <- meta_reg$data %>%
     inset2("weight", value = 1 / sqrt(meta_reg$vi.f)) %>%
     inset(names(pred_prev), value = pred_prev) %>%
     dplyr::group_by(region) %>%
     dplyr::mutate("min" = min(ci.lb), "max" = max(ci.ub)) %>%
     dplyr::ungroup()
-
-  is_glmm <- any(class(meta_reg) == "rma.glmm")
 
   # Extract the beta estimates
   beta_val <- round(meta_reg$b * 100, 2) %>%
@@ -110,6 +117,8 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
 
   return(plt)
 }
+
+vizMetareg(tar_read(meta_reg_glmm))
 
 getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE, ...) {
   #' Calculate the Confidence Interval
