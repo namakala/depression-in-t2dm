@@ -260,14 +260,14 @@ meta_eda$clean_criteria %>% report_meta()
 
 #### No transformation, inverse-variance method, preserved outliers
 
-```{r tbl-bias-clean_criteria-nodrop}
+```{r tbl-bias-clean-criteria-nodrop}
 #| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by diagnostic criteria
 
 bias_eda_nodrop$clean_criteria %>% report_bias()
 
 ```
 
-```{r tbl-meta-clean_criteria-nodrop}
+```{r tbl-meta-clean-criteria-nodrop}
 #| tbl-cap: Pooling effect size in all primary studies, subsetted by diagnostic criteria
 
 meta_eda_nodrop$clean_criteria %>% report_meta()
@@ -294,14 +294,14 @@ meta_eda$clean_instrument %>% report_meta()
 
 #### No transformation, inverse-variance method, preserved outliers
 
-```{r tbl-bias-clean_instrument-nodrop}
+```{r tbl-bias-clean-instrument-nodrop}
 #| tbl-cap: Bias and heterogeneity in all primary studies, subsetted by psychometric instrument
 
 bias_eda_nodrop$clean_instrument %>% report_bias()
 
 ```
 
-```{r tbl-meta-clean_instrument-nodrop}
+```{r tbl-meta-clean-instrument-nodrop}
 #| tbl-cap: Pooling effect size in all primary studies, subsetted by psychometric instrument
 
 meta_eda_nodrop$clean_instrument %>% report_meta()

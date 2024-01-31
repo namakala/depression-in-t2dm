@@ -31,3 +31,4 @@ knitr:
 
 header-includes:
 - \usepackage{typearea}
+- \usepackage[table]{xcolor}
