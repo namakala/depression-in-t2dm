@@ -71,7 +71,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
       sum(!is.na(tbl$.event)),
       min(tbl$incl_year),
       max(tbl$incl_year),
-      tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
+      tbl$clean_criteria %>% table() %>% extract2("Assisted by Clinician")
     )
 
     canvas <- ggplot(tbl, aes(x = incl_year, y = .event / .n))
@@ -83,7 +83,7 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
       sum(!is.na(tbl$.TE)),
       min(tbl$incl_year),
       max(tbl$incl_year),
-      tbl$clean_criteria %>% table() %>% extract2("Clinical Diagnosis")
+      tbl$clean_criteria %>% table() %>% extract2("Assisted by Clinician")
     )
 
     canvas <- ggplot(tbl, aes(x = incl_year, y = .TE))

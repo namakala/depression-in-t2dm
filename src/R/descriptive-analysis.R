@@ -61,7 +61,7 @@ tblSummary <- function(tbl, ...) {
     label = list(
       prev_diabet      ~ "Prevalence of Depression",
       region           ~ "WHO Region",
-      clean_instrument ~ "Diagnostic Instrument"
+      clean_instrument ~ "Diagnosis"
     ),
     statistic = list(
       all_continuous()  ~ "{mean} [{sd}]",

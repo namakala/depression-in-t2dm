@@ -40,9 +40,9 @@ cleanData <- function(tbl) {
   tbl_clean <- tbl %>%
     inset2("incl_year", value = as.numeric(.$incl_year)) %>%
     inset2("clean_criteria", value = .$criteria %>% {ifelse(
-      grepl(x = ., "(interview|diagnosis|history|medical)"),
-      "Clinical Diagnosis",
-      "Self Report"
+      grepl(x = ., "(interview|diagnosis|history|medical|^Assisted)"),
+      "Assisted by Clinician",
+      "Not Assisted by Clinician"
     )}) %>%
     inset2("clean_country", value = {
       .$country %>%
@@ -66,12 +66,12 @@ cleanData <- function(tbl) {
         {ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)}
     }) %>%
     inset2("clean_instrument", value = {
-      {ifelse(grepl(x = .$clean_criteria, "Clin.*Diag"), .$clean_criteria, .$instrument)} %>%
+      {ifelse(grepl(x = .$clean_criteria, "(Clin.*Diag|^Assisted)"), .$clean_criteria, .$instrument)} %>%
         {gsub(x = ., "\\s+([<>].*|&.*|\\n)", "")} %>%
         {ifelse(grepl(x = ., "PHQ", ignore.case = TRUE), "PHQ", .)} %>%
         {ifelse(grepl(x = ., "BDI", ignore.case = TRUE), "BDI", .)} %>%
-        {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag"), ., "Others")} %>%
-        factor(levels = c("Clinical Diagnosis", "BDI", "PHQ", "Others"))
+        {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag|^Assisted"), ., "Others")} %>%
+        factor(levels = c("Assisted by Clinician", "BDI", "PHQ", "Others"))
     }) %>%
     inset2("quality", value = factor(.$quality, levels = c("Low", "Medium", "High")))
 
