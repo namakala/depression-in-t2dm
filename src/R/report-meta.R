@@ -1,5 +1,85 @@
 # Functions to report meta-analysis results
 
+truncatePi <- function(x, is_glmm = FALSE) {
+  #' Truncate the Prediction Interval
+  #'
+  #' Truncate the prediction interval if it is beyond the lower or upper bound
+  #' of a percentage scale
+  #'
+  #' @param x A numeric vector
+  #' @param is_glmm A boolean to indicate whether the prediction interval was
+  #' calculated from a GLMM meta-regression
+  #' @return A truncated numeric vector
+
+  if (is_glmm) {
+    x %<>% exp()
+  }
+
+  res <- x %>% {ifelse(. < 0, 0, ifelse(. > 1, 1, .))}
+
+  return(res)
+}
+
+getPiFromMetareg <- function(meta_reg) {
+  #' Extract the Prediction Interval
+  #'
+  #' Extract the prediction interval from a given meta-regression model. This
+  #' function adopts the calculation from `metafor::predict.rma`
+  #' https://github.com/wviechtb/metafor/blob/720c8bfd7e6119fe77843b7fc98d5e65358a0214/R/predict.rma.r#L404-L405
+  #'
+  #' @param meta_reg A meta-regression object from `meta::metareg`
+  #' @return A tidy data frame containing estimated mean and its predicted intervals
+
+  # Create a dummy variable
+  years <- meta_reg$X.f[, "incl_year"] %>% {c(min(.):max(.))}
+  varname <- meta_reg$X.f %>% colnames()
+
+  dummy_var <- list(
+    rep(years, times = 5),
+    rep(c(1, 0, 0, 0, 0), times = length(years)),
+    rep(c(0, 1, 0, 0, 0), times = length(years)),
+    rep(c(0, 0, 1, 0, 0), times = length(years)),
+    rep(c(0, 0, 0, 1, 0), times = length(years)),
+    rep(c(0, 0, 0, 0, 1), times = length(years))
+  )
+
+  # Set padding to adapt the number of variables in a model
+  pads <- matrix(0, ncol = length(varname) - {length(dummy_var) + 1})
+
+  # Create a dummy matrix
+  dummy_mtx <- data.frame(1, dummy_var, pads) %>%
+    set_colnames(varname) %>% # Need for reference
+    rbind(
+      data.frame( # Bind intercept-only entries
+        1, years, 0, 0, 0, 0, 0, pads
+      ) %>% set_colnames(varname)
+    ) %>%
+    as.matrix()
+
+  # Predict the dependent variable based on the dummy matrix
+  pred <- dummy_mtx %*% meta_reg$beta
+
+  # Calculate the predicted variance
+  beta_cov  <- meta_reg$vb
+  pred_var  <- dummy_mtx %>% {. %*% tcrossprod(beta_cov, .)} %>% diag()
+
+  # Calculate the prediction interval
+  tbl_pi <- data.frame(dummy_mtx, check.names = FALSE) %>%
+    dplyr::mutate(
+      "regionRegion of the Americas" = ifelse(rowSums(dummy_mtx[, 3:7]) == 0, 1, 0),
+      "prev"   = pred,
+      "ci.lb"  = prev - 1.96 * sqrt(pred_var),
+      "ci.ub"  = prev + 1.96 * sqrt(pred_var),
+      "pi.lb"  = prev - 1.96 * sqrt(pred_var + meta_reg$tau2),
+      "pi.ub"  = prev + 1.96 * sqrt(pred_var + meta_reg$tau2)
+    ) %>%
+    tidyr::pivot_longer(dplyr::starts_with("region"), names_to = "region") %>%
+    dplyr::mutate("region" = gsub(x = region, "^region", "")) %>%
+    subset(.$value == 1, select = c(incl_year, region, prev, ci.lb, ci.ub, pi.lb, pi.ub))
+
+  return(tbl_pi)
+}
+
 vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   #' Visualize Meta-Regression
   #'
@@ -13,22 +93,20 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   is_glmm <- any(class(meta_reg) == "rma.glmm")
 
   # Extract the model matrix without intercept to perform prediction
+  pred_sim  <- getPiFromMetareg(meta_reg)
   mod_mtx   <- meta_reg$X.f[, -1]
-
   pred_prev <- meta_reg %>%
     metafor::predict.rma(newmods = mod_mtx) %>%
     data.frame() %>%
     merge(mod_mtx, by = "row.names") %>%
-    subset(select = c(pred, ci.lb, ci.ub))
-
-  if (is_glmm) { # Need to exponentiate the log scale
-    pred_prev %<>% exp()
-  }
+    subset(select = pred)
 
   # Configure table for plotting
   tbl <- meta_reg$data %>%
+    inset2("pred", value = pred_prev$pred) %>%
     inset2("weight", value = 1 / sqrt(meta_reg$vi.f)) %>%
-    inset(names(pred_prev), value = pred_prev) %>%
+    subset(.$region != "Unclassified") %>% # Remove unclassified regions
+    merge(pred_sim, all.x = TRUE) %>%
     dplyr::group_by(region) %>%
     dplyr::mutate("min" = min(ci.lb, na.rm = TRUE), "max" = max(ci.ub, na.rm = TRUE)) %>%
     dplyr::ungroup()
@@ -58,20 +136,46 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
     extract(c("region", "label")) %>%
     rbind(list("region" = ref_region, "label" = "Reference"))
 
-  # Merge equation into the data frame, remove unclassified
+  # Merge equation into the data frame
   tbl %<>%
-    subset(.$region != "Unclassified") %>%
     merge(tbl_eq, by = "region")
 
+  if (is_glmm) { # Need to exponentiate the log scale
+    message("Exponentiate the predicted values")
+    tbl %<>%
+      dplyr::mutate(
+        "pred"  = truncatePi(pred,  is_glmm),
+        "prev"  = truncatePi(prev,  is_glmm),
+        "pi.lb" = truncatePi(pi.lb, is_glmm),
+        "pi.ub" = truncatePi(pi.ub, is_glmm),
+        "ci.lb" = truncatePi(ci.lb, is_glmm),
+        "ci.ub" = truncatePi(ci.ub, is_glmm)
+      )
+  } else {
+    message("Truncate values beyond limits")
+    tbl %<>%
+      dplyr::mutate(
+        "pred"  = truncatePi(pred),
+        "prev"  = truncatePi(prev),
+        "pi.lb" = truncatePi(pi.lb),
+        "pi.ub" = truncatePi(pi.ub),
+        "ci.lb" = truncatePi(ci.lb),
+        "ci.ub" = truncatePi(ci.ub)
+      )
+  }
+
   # Generate subtitle and initiate the canvas
+  msg <- "Meta-regression on %s primary studies from %s to %s, %.01f%% of variance is being explained by regions and approach to identify depression"
+
   if (is_glmm) {
 
     subtitle <- sprintf(
-      "Meta-Regression on %s primary studies from %s to %s, where only %s studies rely on clinical diagnosis",
+      msg,
       sum(!is.na(tbl$.event)),
       min(tbl$incl_year),
       max(tbl$incl_year),
-      tbl$clean_criteria %>% table() %>% extract2("Assisted by Clinician")
+      #tbl$clean_criteria %>% table() %>% extract2("Assisted by Clinician")
+      meta_reg$R2
     )
 
     canvas <- ggplot(tbl, aes(x = incl_year, y = .event / .n))
@@ -79,11 +183,11 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
   } else {
 
     subtitle <- sprintf(
-      "Meta-Regression on %s primary studies from %s to %s, where only %s studies rely on clinical diagnosis",
+      msg,
       sum(!is.na(tbl$.TE)),
       min(tbl$incl_year),
       max(tbl$incl_year),
-      tbl$clean_criteria %>% table() %>% extract2("Assisted by Clinician")
+      meta_reg$R2
     )
 
     canvas <- ggplot(tbl, aes(x = incl_year, y = .TE))
@@ -92,31 +196,38 @@ vizMetareg <- function(meta_reg, alpha = 0.7, ...) {
 
   # Create the figure
   plt <- canvas +
-    geom_ribbon(aes(ymin = min, ymax = max), alpha = alpha * 0.2) +
+    geom_ribbon(aes(ymin = pi.lb, ymax = pi.ub), alpha = alpha * 0.2) +
+    geom_ribbon(aes(ymin = ci.lb, ymax = ci.ub), alpha = alpha * 0.4) +
     geom_point(alpha = alpha * 0.8, aes(color = clean_instrument, size = weight)) +
+    geom_line(aes(y = prev), alpha = alpha, color = "grey30") +
     geom_point(aes(y = pred, size = weight, shape = "Predicted value"), alpha = alpha, color = "grey30") +
     facet_wrap(~ factor(region, levels = levels(tbl$region)), scales = "free") +
-    geom_text(data = tbl_eq, aes(x = -Inf, y = Inf, label = label), parse = TRUE, hjust = -0.1, vjust = 1, size = 3) +
+    geom_text(data = tbl_eq, aes(x = -Inf, y = 1, label = label), parse = TRUE, hjust = -0.1, vjust = 1, size = 3) +
     scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
     scale_size(guide = "none") +
-    guides(color = guide_legend("")) +
-    scale_shape_manual(values = c("Predicted value" = 18), name = "") +
+    scale_shape_manual(values = c("Predicted value" = 18), name = NULL) +
+    guides(color = guide_legend("How was depression identified?")) +
     labs(
       title = "The prediction of depression prevalence among T2DM patients",
       subtitle = subtitle,
-      caption = "The gray band represents predicted confidence interval across regions",
+      caption = "The dark gray band represents precision index, and the light gray band represents dispersion index of the predicted prevalence if depression is identified by clinicians.\nPredictions beyond the dispersion index indicate heterogeneity due to depression being identified by non-clincians.",
       x = "Year of Publication", y = "Depression Prevalence"
     ) +
     theme_minimal() +
     theme(
-      legend.position = "top",
-      legend.direction = "horizontal",
+      panel.grid.minor = element_blank(),
+      plot.subtitle = element_text(size = 10),
       legend.justification = c("left", "bottom"),
-      panel.grid.minor = element_blank()
+      legend.direction = "horizontal",
+      legend.position = "top",
+      legend.title = element_text(size = 9, face = "bold"),
+      legend.text = element_text(size = 9)
     )
 
   return(plt)
 }
+
+vizMetareg(tar_read(meta_reg_nodrop)); ggsave("fig.pdf", width = 10, height = 8)
 
 getCI <- function(meta = NULL, lo = "lower", hi = "upper", se = NULL, m = NULL, multiply = TRUE, ...) {
   #' Calculate the Confidence Interval
