@@ -36,7 +36,7 @@ list(
   tar_target(tbl_gbd, readGBD(file_gbd, ctry_list = tbl_clean$clean_country)),
   tar_target(tbl_merge, mergeGBD(tbl_clean, tbl_gbd)),
   tar_target(tbl_trim, tbl_clean %>% subset(!.$anomaly)),
-  tar_target(tbl_sub, tbl_merge %>% subset(.$clean_instrument != "Others")),
+  tar_target(tbl_sub, tbl_clean %>% subset(.$clean_instrument != "Other")),
 
   # Perform descriptive analysis
   tar_target(desc_clean, tblSummary(tbl_clean)),

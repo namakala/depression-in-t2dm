@@ -65,13 +65,8 @@ cleanData <- function(tbl) {
         {ifelse(grepl(x = ., "UAE"), "United Arab Emirates", .)} %>%
         {ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)}
     }) %>%
-    inset2("clean_instrument", value = {
-      {ifelse(grepl(x = .$clean_criteria, "(Clin.*Diag|^Assisted)"), .$clean_criteria, .$instrument)} %>%
-        {gsub(x = ., "\\s+([<>].*|&.*|\\n)", "")} %>%
-        {ifelse(grepl(x = ., "PHQ", ignore.case = TRUE), "PHQ", .)} %>%
-        {ifelse(grepl(x = ., "BDI", ignore.case = TRUE), "BDI", .)} %>%
-        {ifelse(grepl(x = ., "PHQ|BDI|Clin.*Diag|^Assisted"), ., "Others")} %>%
-        factor(levels = c("Assisted by Clinician", "BDI", "PHQ", "Others"))
+    inset2( "clean_instrument", value = {
+      .$clean_instrument %>% factor(levels = c("HADS", unique(.) %>% sort()) %>% unique())
     }) %>%
     inset2("quality", value = factor(.$quality, levels = c("Low", "Medium", "High")))
 
