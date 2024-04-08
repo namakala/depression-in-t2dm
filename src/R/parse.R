@@ -66,7 +66,7 @@ cleanData <- function(tbl) {
         {ifelse(grepl(x = ., "Malaysia"), "Malaysia", .)}
     }) %>%
     inset2( "clean_instrument", value = {
-      .$clean_instrument %>% factor(levels = c("HADS", unique(.) %>% sort()) %>% unique())
+      .$clean_instrument %>% factor(levels = c("HDRS", unique(.) %>% sort()) %>% unique())
     }) %>%
     inset2("quality", value = factor(.$quality, levels = c("Low", "Medium", "High")))
 
